@@ -1,0 +1,341 @@
+/* general flow */
+
+[data-flow-ui-type] {
+    .flow {
+        position: relative;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 100vw;
+            height: calc(100% - 50px);
+            background-position: center;
+            background-image: url("/assets/img/ico-128.png");
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+            transition-delay: 0.2s;
+            pointer-events: none;
+        }
+
+        &.busy {
+            &::after {
+                transition: opacity 0.2s ease;
+                opacity: 1;
+                animation: spin 1s linear infinite;
+            }
+        }
+
+        .arrow {
+            font-size: larger;
+            font-weight: 800;
+            margin-left: 1rem;
+        }
+
+        .card.flex {
+            dl {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                dt {
+                    font-weight: 800;
+                }
+                dt,
+                dd {
+                    margin: 0;
+                    padding: 0;
+                }
+            }
+
+            .footnotes {
+                color: #666;
+                font-size: smaller;
+
+                dl {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 1rem;
+
+                    dt::after {
+                        content: unset;
+                    }
+
+                    dt {
+                        margin: 0;
+                    }
+
+                    dd {
+                        font-weight: 400;
+                        font-style: italic;
+                        margin: 0;
+                    }
+                }
+            }
+        }
+
+        a:link,
+        a:visited {
+            color: var(--color-accent-200);
+            text-decoration: none;
+            font-weight: 800;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        blockquote {
+            border-radius: 1rem;
+            font-size: 1.3em;
+            max-width: 400px;
+            margin: 2rem auto;
+            font-family: Open Sans;
+            font-style: italic;
+            color: #555555;
+            padding: 1.2em 30px 1.2em 75px;
+            border-left: 8px solid var(--color-accent-200);
+            line-height: 1.2;
+            position: relative;
+            background: var(--color-primary-100);
+
+            &::before {
+                font-family: Arial;
+                content: "\201C";
+                color: var(--color-accent-200);
+                font-size: 4em;
+                position: absolute;
+                left: 10px;
+                top: -10px;
+            }
+
+            &::after {
+                content: "";
+            }
+
+            span {
+                display: block;
+                color: #333333;
+                font-style: normal;
+                font-weight: bold;
+                margin-top: 1em;
+            }
+        }
+
+        .callout {
+            max-width: 350px;
+            background-color: white;
+            border-radius: 1rem;
+            padding: 1rem;
+        }
+    }
+
+    /* utility */
+
+    .flow-step {
+        &.skipped {
+            display: none !important;
+        }
+
+        &:not(.completed) {
+            .when-completed {
+                display: none;
+            }
+        }
+        &.completed {
+            .when-completed {
+                display: unset;
+            }
+        }
+
+        &:not(.running) {
+            .when-running {
+                display: none;
+            }
+        }
+        &.running {
+            .when-running {
+                display: unset;
+            }
+        }
+    }
+
+    /* form - SOME GENERIC */
+
+    .flow form {
+        max-width: 80vw;
+
+        label {
+            display: block;
+        }
+        .flex {
+            display: flex;
+            &.row {
+                flex-direction: row;
+                gap: 0.5rem;
+            }
+        }
+
+        .form-group {
+            legend {
+                margin-top: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            [data-label] {
+                font-size: 1rem;
+            }
+        }
+
+        fieldset {
+            border: 0;
+
+            &:has(legend) {
+                display: grid;
+            }
+
+            &.horizontal {
+                flex-direction: row;
+            }
+
+            &.nav {
+                margin-top: 2rem;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-items: center;
+                justify-content: space-between;
+                gap: .5rem
+            }
+
+            span[data-label] {
+                display: block;
+            }
+
+            label {
+                display: block;
+                font-weight: 400;
+            }
+
+            legend {
+                display: block;
+                width: 100%;
+                font-size: 18px;
+                font-weight: 600;
+
+                &:empty {
+                    display: none;
+                }
+            }
+
+            &[data-control-type="display"] {
+                margin-bottom: 2rem;
+            }
+        }
+
+        .complete:not(:last-child) {
+            display: none;
+        }
+
+        textarea {
+            outline: none;
+            min-height: 7rem;
+            min-width: 250px;
+            resize: vertical;
+            border-radius: 0.5rem;
+            padding: 0.8rem 1.4rem;
+            font-family: inherit;
+            font-size: 1.2rem;
+            width: 100%;
+        }
+
+        input {
+            font-size: 1.2rem;
+            width: 100%;
+
+            &[type="checkbox"],
+            &[type="radio"] {
+                width: unset;
+            }
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #888;
+            font-style: italic;
+        }
+    }
+
+    /* specific flows */
+
+    [data-flow] {
+        .health-info {
+            text-align: center;
+            font-size: 1.5rem;
+
+            &[data-rating="1"] {
+                color: var(--color-accent-200);
+            }
+            &[data-rating="2"] {
+                color: var(--color-accent-200);
+            }
+            &[data-rating="3"] {
+                color: var(--color-accent-300);
+            }
+            &[data-rating="4"] {
+                color: var(--color-accent-300);
+            }
+            &[data-rating="5"] {
+                color: var(--color-accent-400);
+            }
+        }
+
+        .lynn {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+
+            img,
+            figcaption {
+                max-width: 250px;
+            }
+
+            figcaption {
+                margin-top: 2rem;
+                display: block;
+                font-size: normal;
+                color: #666;
+            }
+
+            h2 {
+                text-align: center;
+            }
+        }
+
+        .flow-step.running .lynn {
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards;
+        }
+
+        .flow-step.completed .lynn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            img,
+            figcaption {
+                max-width: 50px;
+            }
+
+            figcaption {
+                display: none;
+            }
+        }
+    }
+
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+        }
+    }
+}

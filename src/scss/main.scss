@@ -1,0 +1,28 @@
+@import "./flow-ui";
+@import "./flow-full-page";
+
+body {
+    padding: 2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+button {
+    border: 0;
+    padding: 0.6rem 1rem;
+    background-color: #34a6b8;
+    color: white;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    box-shadow: inset -0.1rem -0.1em rgba(0, 0, 0, 0.5);
+
+    &:hover {
+        filter: brightness(120%);
+        transition: 0.2s ease-in-out;
+    }
+
+    &:active {
+        transform: translate(0.1rem, 0.1rem);
+        transition: 0.2s ease-in-out;
+    }
+}

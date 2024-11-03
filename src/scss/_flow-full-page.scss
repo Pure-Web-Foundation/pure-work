@@ -1,0 +1,48 @@
+/* full page flow */
+[data-flow-ui-type="full-page"] {
+    fab-button {
+        display: none;
+    }
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    :has(>.flow) {
+        overflow: hidden;
+    }
+
+    .flow {
+        height: 100vh;
+        overflow-y: scroll;
+        scroll-snap-type: y mandatory;
+
+        .flow-step {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            justify-items: center;
+            justify-items: center;
+
+            scroll-snap-align: center;
+
+            &.completing {
+                transform: scale(0.95);
+                transition: transform 0.05s ease-in;
+
+                button[type="submit"] {
+                    opacity: 0.6;
+                    pointer-events: none;
+                }
+            }
+
+            &.completed {
+                pointer-events: none;
+                form {
+                    opacity: 0.6;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,35 @@
+{
+  "name": "pure-work",
+  "version": "1.0.0",
+  "description": "Pure Vanilla Workflow Engine",
+  "main": "./public/assets/js/index.js",
+  "exports": {
+    "./flow": "./src/js/flow/flow.js"
+  },
+  "scripts": {
+    "dev": "node esbuild-dev.js",
+    "build": "node esbuild-prd.js&tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "pure-flow"
+  },
+  "keywords": [
+    "workflow",
+    "promise",
+    "JavaScript"
+  ],
+  "author": "Marc van Neerven",
+  "license": "ISC",
+  "dependencies": {
+    "lit": "^3.1.4",
+    "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "esbuild": "^0.23.0",
+    "esbuild-plugin-sass": "^1.0.1",
+    "eslint": "^9.2.0",
+    "eslint-plugin-lit": "^1.12.0",
+    "eslint-plugin-wc": "^2.1.0"
+  }
+}
