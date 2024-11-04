@@ -3,6 +3,7 @@
   "version": "1.0.2",
   "description": "Pure Vanilla Workflow Engine",
   "main": "./public/assets/js/index.js",
+  "website": "https://pwfworkflow.z6.web.core.windows.net/",
   "exports": {
     "./flow": "./src/js/flow/index.js"
   },
