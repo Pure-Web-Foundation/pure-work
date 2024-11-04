@@ -1,5 +1,4 @@
 const esbuild = require("esbuild");
-const rebuildNotifyPlugin = require("./lib/esbuild-plugin-rebuild-notify");
 const sassPlugin = require("esbuild-plugin-sass");
 
 const config = {
@@ -7,7 +6,6 @@ const config = {
     'src/js/index.js'
   ],
   plugins: [
-    rebuildNotifyPlugin(),
     sassPlugin({
       type: "css-text",
     }),
@@ -30,3 +28,4 @@ const run = async () => {
 };
 
 run();
+console.log("Build completed");

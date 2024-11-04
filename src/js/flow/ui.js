@@ -343,7 +343,16 @@ export const UI = {
     renderInput: selectOne,
   },
   selectMany: {
+    isMany: true,
     renderInput: selectMany,
+    transform: {
+      out: (value) => {
+        return value
+      },
+      in: (text) => {
+        return text?.split(",") ?? [];
+      },
+    },
   },
   boolean: {
     items: ["Yes", "No"],

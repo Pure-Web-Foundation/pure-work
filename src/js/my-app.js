@@ -64,7 +64,7 @@ const UI = {
   results: {
     wait: 6000,
     show: (step) => {
-      const items = Object.entries(results);
+      const items = Object.entries(step.topic);
 
       return html`
         <section>
@@ -92,8 +92,10 @@ customElements.define(
     };
 
     render() {
-      if (!this.load)
-        return html`<button @click=${this.start}>Start survey</button>`;
+      if (!this.load) {
+        return html` <h1>Movie survey</h1>
+          <button @click=${this.start}>Start survey</button>`;
+      }
 
       if (this.load)
         return html`
@@ -137,7 +139,7 @@ customElements.define(
     async movieSurvey(wf) {
       const results = {};
 
-      await wf.text("Welcome to this survey!");
+      await wf.text("Welcome to the movie survey!");
 
       results.movieLover = await wf.ask("Are you a movie lover?", UI.lover);
 
@@ -195,7 +197,7 @@ customElements.define(
 
       await wf.text("Results coming up....");
 
-      await wf.show(`Results`, UI.results);
+      await wf.show(results, UI.results);
 
       await wf.end();
     }
