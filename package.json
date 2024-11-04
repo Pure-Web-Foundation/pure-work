@@ -1,9 +1,9 @@
 {
   "name": "@pwf/pure-work",
   "version": "1.0.2",
-  "description": "Pure Vanilla Workflow Engine",
+  "description": "Pure Vanilla Web App work processing",
   "main": "./public/assets/js/index.js",
-  "website": "https://pwfworkflow.z6.web.core.windows.net/",
+  "homepage": "https://pwfworkflow.z6.web.core.windows.net/",
   "exports": {
     "./flow": "./src/js/flow/index.js"
   },
