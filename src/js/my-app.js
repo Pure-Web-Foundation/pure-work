@@ -8,12 +8,13 @@ const UI = {
   lover: {
     ...baseUI.selectOne,
     items: ["Not at all", "A bit", "Sure", "Love them!"],
+    id: "movie-lover",
   },
   location: {
     ...baseUI.selectOne,
     items: ["At home", "In a theater", "No difference"],
   },
-  theaterFrequency: {
+  theater: {
     ...baseUI.selectOne,
     items: [
       "Never",
@@ -42,7 +43,7 @@ const UI = {
     ...baseUI.selectOne,
     items: ["Trailers", "Reviews", "Social Media", "Friends", "Other"],
   },
-  streamingServices: {
+  streaming: {
     ...baseUI.selectMany,
     items: ["Netflix", "Hulu", "Amazon Prime", "HBO Max", "Disney+", "Other"],
   },
@@ -60,26 +61,48 @@ const UI = {
       "Thriller",
     ],
   },
+  results: {
+    wait: 6000,
+    show: (step) => {
+      const items = Object.entries(results);
+
+      return html`
+        <section>
+          <dl class="key-value">
+            ${repeat(items, ([key, value]) => {
+              return html`<dt>${key}</dt>
+                <dd>${value}</dd>`;
+            })}
+          </dl>
+        </section>
+      `;
+    },
+  },
 };
 
 customElements.define(
   "my-app",
   class MyApp extends LitElement {
-    static get properties() {
-      return {
-        load: { type: Object },
-        flowType: { type: String },
-      };
-    }
-
     createRenderRoot() {
       return this;
     }
 
+    static properties = {
+      load: { type: Object },
+    };
+
     render() {
-      return html`
-        <flow-ui type="full-page" .options=${this.movieSurveyFlow}></flow-ui>
-      `;
+      if (!this.load)
+        return html`<button @click=${this.start}>Start survey</button>`;
+
+      if (this.load)
+        return html`
+          <flow-ui type="full-page" .options=${this.load}></flow-ui>
+        `;
+    }
+
+    start() {
+      this.load = this.movieSurveyFlow;
     }
 
     get movieSurveyFlow() {
@@ -87,8 +110,10 @@ customElements.define(
         "movieSurvey",
         this.movieSurvey.bind(this),
         (flow) => {
-          this.flowType = "full-page";
           this.flow = flow;
+
+          // custom action
+          this.flow.install("text", this.text.bind(this));
 
           flow.on("flow-ended", (e) => {
             this.load = null;
@@ -97,19 +122,33 @@ customElements.define(
       );
     }
 
+    text(step) {
+      step.render = () => html`${step.topic}`;
+
+      step.on("continue-request", (e) => {
+        e.continue();
+      });
+
+      setTimeout(() => {
+        step.resolve();
+      }, step.options.timeout ?? 3000);
+    }
+
     async movieSurvey(wf) {
       const results = {};
+
+      await wf.text("Welcome to this survey!");
 
       results.movieLover = await wf.ask("Are you a movie lover?", UI.lover);
 
       results.genres = await wf.ask(
-        "What is your favorite movie genre?",
+        "What are your favorite movie genres?",
         UI.genres
       );
 
       results.theater = await wf.ask(
         "How often do you watch movies in a theater?",
-        UI.theaterFrequency
+        UI.theater
       );
 
       results.location = await wf.ask(
@@ -117,7 +156,7 @@ customElements.define(
         UI.location
       );
 
-      results.locationWhy = await wf.ask("Why?", UI.longtext);
+      results.why = await wf.ask("Why?", UI.longtext);
 
       results.factor = await wf.ask(
         "What is the most important factor when choosing a movie to watch?",
@@ -129,12 +168,12 @@ customElements.define(
         UI.text
       );
 
-      results.top1 = await wf.ask(
+      results.best = await wf.ask(
         "What is your favorite movie of all time?",
         UI.text
       );
 
-      results.news = await wf.ask(
+      results.discover = await wf.ask(
         "How do you usually find out about new movies?",
         UI.news
       );
@@ -144,29 +183,19 @@ customElements.define(
         UI.social
       );
 
-      results.news = await wf.ask(
+      results.streaming = await wf.ask(
         "Which streaming services to you prefer for movies?",
-        UI.streamingServices
+        UI.streaming
       );
 
-      results.news = await wf.ask(
+      results.reviewImportance = await wf.ask(
         "How important are movie reviews to you when deciding what to watch?",
         UI.importance
       );
 
-      await wf.show(`Results`, {
-        wait: 3000,
-        show: (step) => {
-          const items = Object.entries(results);
+      await wf.text("Results coming up....");
 
-          return html`<dl>
-            ${repeat(items, ([key, value]) => {
-              return html`<dt>${key}</dt>
-                <dd>${value}</dd>`;
-            })}
-          </dl>`;
-        },
-      });
+      await wf.show(`Results`, UI.results);
 
       await wf.end();
     }

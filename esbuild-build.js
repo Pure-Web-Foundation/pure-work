@@ -26,7 +26,7 @@ const config = {
 
 const run = async () => {
   const ctx = await esbuild.context(config);
-  await ctx.build();
+  await ctx.rebuild();
 };
 
 run();

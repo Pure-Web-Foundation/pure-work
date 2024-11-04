@@ -84,3 +84,23 @@ button {
     }
 }
 
+dl.key-value {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+
+    dt {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: right;
+        opacity: 0.75;
+    }
+    dt:after {
+        content: ":";
+        display: inline;
+    }
+
+    dd {
+        font-weight: 800;
+    }
+}
