@@ -1,5 +1,5 @@
 {
-  "name": "@pwf/flow",
+  "name": "@pwf/pure-work",
   "version": "1.0.0",
   "description": "Pure Vanilla Workflow Engine",
   "main": "./public/assets/js/index.js",
