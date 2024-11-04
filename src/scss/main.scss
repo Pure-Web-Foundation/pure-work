@@ -11,8 +11,7 @@ section {
     border-radius: var(--rad-default);
 }
 
-section,
-fieldset {
+section {
     padding: var(--pad-default);
 }
 
@@ -102,5 +101,11 @@ dl.key-value {
 
     dd {
         font-weight: 800;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    body {
+        padding: 10px;
     }
 }

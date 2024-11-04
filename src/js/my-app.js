@@ -1,7 +1,8 @@
 import { html, LitElement } from "lit";
-import { FlowOptions } from "./flow/index";
-import { UI as baseUI } from "./flow/ui";
+import { FlowOptions } from "./flow";
 import { repeat } from "lit/directives/repeat.js";
+import { UI as baseUI } from "./flow/ui";
+
 
 const UI = {
   ...baseUI,
@@ -94,6 +95,15 @@ customElements.define(
     render() {
       if (!this.load) {
         return html` <h1>Movie survey</h1>
+          <p>
+            An example of running a workflow with the
+            <a
+              target="_blank"
+              href="https://www.npmjs.com/package/@pwf/pure-work"
+              >pure-work/flow</a
+            >
+            flow runner.
+          </p>
           <button @click=${this.start}>Start survey</button>`;
       }
 
@@ -103,10 +113,12 @@ customElements.define(
         `;
     }
 
+    // starts the workflow
     start() {
       this.load = this.movieSurveyFlow;
     }
 
+    // returns options for a workflow
     get movieSurveyFlow() {
       return new FlowOptions(
         "movieSurvey",
@@ -124,6 +136,7 @@ customElements.define(
       );
     }
 
+    // custom action
     text(step) {
       step.render = () => html`${step.topic}`;
 
@@ -136,12 +149,15 @@ customElements.define(
       }, step.options.timeout ?? 3000);
     }
 
+    // entrypoint (first step) of the workflow
     async movieSurvey(wf) {
-      const results = {};
+      
 
       await wf.text("Welcome to the movie survey!");
 
-      results.movieLover = await wf.ask("Are you a movie lover?", UI.lover);
+      const results = {
+        movieLover: await wf.ask("Are you a movie lover?", UI.lover)
+      }
 
       results.genres = await wf.ask(
         "What are your favorite movie genres?",
@@ -164,6 +180,9 @@ customElements.define(
         "What is the most important factor when choosing a movie to watch?",
         UI.factor
       );
+
+      if(results.factor=== "Other")
+        results.factor = await wf.ask("What is the crucial factor in choosing a movie?", UI.longtext)
 
       results.actor = await wf.ask(
         "Who is your favorite actor or actress?",
