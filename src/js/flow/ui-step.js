@@ -1,5 +1,5 @@
 import { nothing, LitElement } from "lit";
-import { EventTargetMixin, FlowStepState } from "./flow-common";
+import { EventTargetMixin, FlowStepState } from "./common";
 
 customElements.define(
   "flow-ui-step",
@@ -31,6 +31,7 @@ customElements.define(
       this.setStepClasses(step, isLast);
 
       try {
+
         return step.render();
       } finally {
         if (isLast) {

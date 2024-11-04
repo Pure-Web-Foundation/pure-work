@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import { FlowStep } from "./flow-step";
+import { FlowStep } from "./step";
 
 /**
  * FlowState class -  This class is used to store flow state information.

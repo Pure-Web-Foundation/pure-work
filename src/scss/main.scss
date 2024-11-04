@@ -1,9 +1,51 @@
-@import "./flow-ui";
-@import "./flow-full-page";
+@import "./variables";
+@import url("/assets/css/flow.css");
 
 body {
     padding: 2rem;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+form,
+section {
+    border-radius: var(--rad-default);
+}
+
+section,
+fieldset {
+    padding: var(--pad-default);
+}
+
+input,
+textarea {
+    font-size: 1.2rem;
+    padding: var(--pad-default);
+    border-radius: var(--rad-default);
+    width: fit-content;
+}
+
+textarea {
+    outline: none;
+    min-height: 7rem;
+    min-width: 250px;
+    resize: vertical;
+    border-radius: 0.5rem;
+    padding: 0.8rem 1.4rem;
+    font-family: inherit;
+    font-size: 1.2rem;
+}
+
+input {
+    &[type="checkbox"],
+    &[type="radio"] {
+        width: unset;
+    }
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #888;
+    font-style: italic;
 }
 
 button {
@@ -26,3 +68,19 @@ button {
         transition: 0.2s ease-in-out;
     }
 }
+
+.flex {
+    display: flex;
+    &.row {
+        flex-direction: row;
+        gap: 0.5rem;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    form,
+    section {
+        background-color: #333;
+    }
+}
+

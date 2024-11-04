@@ -1,36 +1,28 @@
 /* full page flow */
-[data-flow-ui-type="full-page"] {
-    ::-webkit-scrollbar {
-        display: none;
-    }
-
+[data-flow-ui-type="im"] {
     :has(> [data-flow-inner]) {
         overflow: hidden;
     }
 
     [data-flow-inner] {
-        height: 100vh;
-        overflow-y: scroll;
-        scroll-snap-type: y mandatory;
+        display: flex;
+        flex-direction: column;
+        height: 90vh;
+        
 
         flow-ui-step {
-            height: 100vh;
             display: flex;
-            align-items: center;
+
+            align-items: end;
             justify-content: center;
             justify-items: center;
             justify-items: center;
 
             scroll-snap-align: center;
 
-            &.completing {
-                transform: scale(0.95);
-                transition: transform 0.05s ease-in;
-
-                button[type="submit"] {
-                    opacity: 0.6;
-                    pointer-events: none;
-                }
+            form,
+            section {
+                background-color: transparent;
             }
 
             &.completed {
@@ -39,6 +31,12 @@
                     opacity: 0.6;
                 }
             }
+
+            &.current-step {
+                position: fixed;
+                bottom: 10px
+            }
+
         }
     }
 }

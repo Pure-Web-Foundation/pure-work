@@ -1,3 +1,3 @@
 import "./my-app";
-import "./flow/flow";
-import "./flow/flow-ui";
+import "./flow/index";
+import "./flow/ui";

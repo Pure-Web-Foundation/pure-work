@@ -1,13 +1,13 @@
-import { EventTargetMixin } from "./flow-common";
-import { FlowStep } from "./flow-step";
-import { FlowState } from "./flow-state";
-import { FlowOptions } from "./flow-options";
+import { EventTargetMixin } from "./common";
+import { FlowStep } from "./step";
+import { FlowState } from "./state";
+import { FlowOptions } from "./options";
 import {
   takeSimpleProperties,
   TimeoutError,
   withTimeout,
   FlowStepState,
-} from "./flow-common";
+} from "./common";
 
 const DEFAULT_RESOLVE_DELAY = 50;
 const DEFAULT_STEP_TIMEOUT = 1000 * 60 * 30; // 30 minutes.
@@ -16,7 +16,6 @@ const DEFAULT_STEP_TIMEOUT = 1000 * 60 * 30; // 30 minutes.
  * Flow Engine, implemented using chained promises.
  */
 export class Flow extends EventTargetMixin(EventTarget) {
-  //static _promises = {};
   #steps = [];
   #stepIndex = -1;
   #options;
@@ -37,9 +36,7 @@ export class Flow extends EventTargetMixin(EventTarget) {
 
     this.#installActions();
 
-    this.#setupHooks();
-
-    //return Object.seal(this);
+    this.#setupHooks();    
   }
 
   /**
@@ -63,6 +60,8 @@ export class Flow extends EventTargetMixin(EventTarget) {
     options.initFn(wf);
 
     this.#internal = false;
+
+    Object.seal(this);
     return wf;
   }
 

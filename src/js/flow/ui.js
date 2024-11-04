@@ -1,9 +1,8 @@
-import { EventTargetMixin, scrollIntoView, FlowStepState } from "./flow-common";
+import { EventTargetMixin, scrollIntoView, FlowStepState } from "./common";
 import { LitElement, html, nothing } from "lit";
-import { Flow } from "./flow";
+import { Flow } from "./index";
 import { repeat } from "lit/directives/repeat.js";
-import "./flow-ui-step";
-import { transform } from "../../../node_modules/typescript/lib/typescript";
+import "./ui-step";
 const htmlElm = document.documentElement;
 
 export class FlowUI extends EventTargetMixin(LitElement) {
@@ -12,7 +11,7 @@ export class FlowUI extends EventTargetMixin(LitElement) {
   static get properties() {
     return {
       options: { type: Object },
-      type: { type: String },
+      type: { type: String, attribute: true },
       currentStep: { type: Object },
     };
   }
@@ -22,6 +21,10 @@ export class FlowUI extends EventTargetMixin(LitElement) {
   }
 
   updated(changedProperties) {
+    if (changedProperties.has("type")) {
+      htmlElm.setAttribute("data-flow-ui-type", this.type);
+    }
+
     if (changedProperties.has("options")) {
       if (!this.options) return;
 
@@ -33,7 +36,6 @@ export class FlowUI extends EventTargetMixin(LitElement) {
       })
         .on("flow-started", () => {
           htmlElm.setAttribute("data-flow", wf.options.id);
-          htmlElm.setAttribute("data-flow-ui-type", this.type);
         })
         .on("step-rendered", (e) => {
           const step = e.detail;
@@ -52,7 +54,7 @@ export class FlowUI extends EventTargetMixin(LitElement) {
   }
 
   render() {
-    return html`<div class="flow">${this.renderFlow()}</div> `;
+    return html`<div data-flow-inner>${this.renderFlow()}</div> `;
   }
 
   renderFlow() {
@@ -77,6 +79,18 @@ export class FlowUI extends EventTargetMixin(LitElement) {
 
     wf.install("ui", FlowUI.ui);
     wf.install("ask", FlowUI.ui);
+    wf.install("show", async (step) => {
+      step.render = () => {
+        if (typeof step.options.show === "function")
+          return step.options.show(step);
+
+        return html`<span data-step-show>${step.topic}</span>`;
+      };
+
+      setTimeout(() => {
+        step.resolve();
+      }, step.options.wait ?? 500);
+    });
 
     wf.on("step-started", () => {
       this.requestUpdate();
@@ -86,9 +100,8 @@ export class FlowUI extends EventTargetMixin(LitElement) {
         step.render = () => html`${step.topic ?? ""}`;
       })
       .on("enter-detected", () => {
-        debugger;
         const form = this.querySelector(
-          ".flow .flow-step:not(.completed) form"
+          "[data-flow-inner] .flow-step:not(.completed) form"
         );
         if (form) form.requestSubmit(form.querySelector("[name='continue']"));
         else wf.requestResolve();
@@ -157,7 +170,7 @@ class Form {
     >
       ${this.renderControl()}
 
-      <fieldset data-flow-continue class="nav flex">
+      <fieldset data-flow-continue>
         <button name="continue" title="Continue" class="green" type="submit">
           Continue
           <span class="arrow">↲</span>
@@ -206,7 +219,7 @@ class Form {
   }
 
   render() {
-    return html` <section class="flex card">${this.renderStep()}</section>`;
+    return this.renderStep();
   }
 
   renderStep() {
@@ -285,15 +298,35 @@ ${step.value ?? ""}</textarea
 };
 
 const selectOne = (step) => {
+  const defaultSelected = step.value ? -1 : 0;
   return html`
-    <fieldset>
-      ${repeat(step.options.items, (item) => {
-        return html`<label class="flex row">
+    <fieldset data-radio>
+      ${repeat(step.options.items, (item, index) => {
+        return html`<label>
           <input
             type="radio"
             name="step"
             value="${item}"
-            ?checked=${step.value === item}
+            ?checked=${defaultSelected === index || step.value === item}
+          />
+          <span class="data-label">${item}</span>
+        </label>`;
+      })}
+    </fieldset>
+  `;
+};
+
+const selectMany = (step) => {
+  const defaultSelected = [...(step.value ?? [])];
+  return html`
+    <fieldset data-radio>
+      ${repeat(step.options.items, (item) => {
+        return html`<label>
+          <input
+            type="checkbox"
+            name="step"
+            value="${item}"
+            ?checked=${defaultSelected.includes(item)}
           />
           <span class="data-label">${item}</span>
         </label>`;
@@ -306,12 +339,21 @@ export const UI = {
   input: {
     renderInput: input,
   },
+  selectOne: {
+    renderInput: selectOne,
+  },
+  selectMany: {
+    renderInput: selectMany,
+  },
   boolean: {
     items: ["Yes", "No"],
     renderInput: selectOne,
     transform: {
       out: (value) => {
         return value === "Yes";
+      },
+      in: (text) => {
+        return ["true", "Yes"].includes(text) ? "Yes" : "No";
       },
     },
   },

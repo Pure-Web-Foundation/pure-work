@@ -1,14 +1,14 @@
 {
-  "name": "pure-work",
+  "name": "@pwf/flow",
   "version": "1.0.0",
   "description": "Pure Vanilla Workflow Engine",
   "main": "./public/assets/js/index.js",
   "exports": {
-    "./flow": "./src/js/flow/flow.js"
+    "./flow": "./src/js/flow/index.js"
   },
   "scripts": {
     "dev": "node esbuild-dev.js",
-    "build": "node esbuild-prd.js&tsc"
+    "build": "node esbuild-build.js&tsc"
   },
   "repository": {
     "type": "git",

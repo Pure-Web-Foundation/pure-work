@@ -1,4 +1,4 @@
-import { EventTargetMixin, FlowStepState } from "./flow-common";
+import { EventTargetMixin, FlowStepState } from "./common";
 
 export class FlowStep extends EventTargetMixin(EventTarget) {
   #options;
@@ -51,6 +51,8 @@ export class FlowStep extends EventTargetMixin(EventTarget) {
 
   async initialize() {
     let value = await this.#flow.options.state.loadStep(this);
+    console.log("loaded: ", this.key, value)
+
     if (value ?? null) {
       if (this.options.transform?.in)
         value = this.options.transform.in.bind(this)(value);

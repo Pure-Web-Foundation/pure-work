@@ -1,5 +1,5 @@
 
-import { Flow, FlowOptions } from "./flow/flow";
+import { Flow, FlowOptions } from "./flow/index";
 
 let _flow;
 
