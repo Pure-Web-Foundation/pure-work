@@ -12,30 +12,22 @@ npm install @pwf/pure-work --save
 
 Pure Work is a set of standards-based modules that help in developing web apps.
 
-## Flow
+## 1. Flow
 
 Flow is a Workflow Engine with no dependencies, that enables you to run workflows by chaining JavaScript _Promises_.
 
 Flow can be used to build complex workflows that are triggered by user actions or other events.
 
-### Features
+Every step in the workflow represents a piece of work that can have a UI representation.
+
+### 1.1 Features
 
 1. Simplicity (just chain async methods/promises)
-2. Customizaability (extend the flow with custom methods and hooks)
-3. Extensibility (use existing modules or create new ones)
+2. Customizability (the only requirement is for each step to be an async method)
+3. Extensibility (hook into the event model, and extend each step with custom UI)
 4. 100% separation of workflow running (`Flow`) and UI handling (`<flow-ui>` web component).
 
-```js
-import { Flow } from "pure-work/flow";
-
-const options = new FlowOptions("test", this.test1.bind(this), (flow) => {
-  this.flow = flow;
-});
-
-const flow = Flow.factory(options);
-```
-
-## <flow-ui> Web Component
+### 1.2 Basic Usage (`flow-ui` Web Component)
 
 The `flow-ui` Web Component can be used to run visual workflows.
 
@@ -58,12 +50,38 @@ It wraps the `Flow` class and provides a UI for running flows.
     const person = {
       name: await f.ask("What's your name?", UI.text),
       email: await f.ask("And your email address?", UI.email);
-
     }
+
+    await f.show(`name: ${person.name} (${person.email})`, {
+      wait: 5000
+    })
 
   }
 ```
 
-### Demo
+### 1.3 Demo
 
 See [the demo page](https://pwfworkflow.z6.web.core.windows.net/) for a live demo.
+
+
+### 1.4 Advanced Usage (`Flow` class)
+
+Where `flow-ui` is a UI wrapper around the `Flow` class, the `Flow` class is UI-independent, and can be used to build everywhere.
+
+```js
+import { Flow } from "pure-work/flow";
+
+const options = new FlowOptions(
+  "test",
+  this.myFlowStartingpoint.bind(this),
+  (flow) => {
+    this.flow = flow;
+
+    // this.install(...)
+  }
+);
+
+const flow = Flow.factory(options);
+await flow.start();
+```
+

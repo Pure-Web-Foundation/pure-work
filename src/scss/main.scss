@@ -83,6 +83,13 @@ button {
     }
 }
 
+@media (prefers-color-scheme: light) {
+    form,
+    section {
+        background-color: #eee;
+    }
+}
+
 dl.key-value {
     display: grid;
     grid-template-columns: 100px 1fr;

@@ -1,15 +1,17 @@
 {
   "name": "@pwf/pure-work",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Pure Vanilla Web App work processing",
   "main": "./public/assets/js/index.js",
   "homepage": "https://pwfworkflow.z6.web.core.windows.net/",
   "exports": {
-    "./flow": "./src/js/flow/index.js"
+    "./flow": "./src/js/flow/index.js",
+    "./flow/ui": "./src/js/flow/ui.js"
   },
   "scripts": {
     "dev": "node esbuild-dev.js",
-    "build": "node esbuild-build.js&tsc"
+    "build": "node esbuild-build.js&tsc",
+    "docs": "jsdoc2md ./src/js/flow/index.js > docs/flow.md"
   },
   "repository": {
     "type": "git",
@@ -31,6 +33,7 @@
     "esbuild-plugin-sass": "^1.0.1",
     "eslint": "^9.2.0",
     "eslint-plugin-lit": "^1.12.0",
-    "eslint-plugin-wc": "^2.1.0"
+    "eslint-plugin-wc": "^2.1.0",
+    "jsdoc-to-markdown": "^9.0.5"
   }
 }

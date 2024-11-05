@@ -1,4 +1,3 @@
-import { EventTargetMixin } from "./common";
 import { FlowStep } from "./step";
 import { FlowState } from "./state";
 import { FlowOptions } from "./options";
@@ -7,6 +6,7 @@ import {
   TimeoutError,
   withTimeout,
   FlowStepState,
+  EventTargetMixin
 } from "./common";
 
 const DEFAULT_RESOLVE_DELAY = 50;
@@ -313,4 +313,4 @@ export class Flow extends EventTargetMixin(EventTarget) {
   }
 }
 
-export { FlowOptions, FlowStep, FlowState };
+export { FlowOptions, FlowStep, FlowState, FlowStepState };
