@@ -51,7 +51,6 @@ export class FlowStep extends EventTargetMixin(EventTarget) {
 
   async initialize() {
     let value = await this.#flow.options.state.loadStep(this);
-    console.log("loaded: ", this.key, value)
 
     if (value ?? null) {
       if (this.options.transform?.in)

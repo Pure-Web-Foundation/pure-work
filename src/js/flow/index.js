@@ -78,11 +78,7 @@ export class Flow extends EventTargetMixin(EventTarget) {
     document.removeEventListener("keypress", this._keydown);
   }
 
-  /**
-   * Creates a flow step.
-   * @param {Function} fn - The function to be executed when the step is reached.
-   * @returns { Promise }
-   */
+  //Creates a flow step.
   static #action(fn, baseOptions) {
     const wrapperFunction = async function (topic, options) {
       if (this.steps.length === 0) {

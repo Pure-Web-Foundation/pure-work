@@ -3,7 +3,6 @@ import { FlowOptions } from "./flow";
 import { repeat } from "lit/directives/repeat.js";
 import { UI as baseUI } from "./flow/ui";
 
-
 const UI = {
   ...baseUI,
   lover: {
@@ -159,6 +158,11 @@ customElements.define(
         movieLover: await wf.ask("Are you a movie lover?", UI.lover)
       }
 
+      results.best = await wf.ask(
+        "What is your favorite movie of all time?",
+        UI.text
+      );
+
       results.genres = await wf.ask(
         "What are your favorite movie genres?",
         UI.genres
@@ -189,10 +193,7 @@ customElements.define(
         UI.text
       );
 
-      results.best = await wf.ask(
-        "What is your favorite movie of all time?",
-        UI.text
-      );
+      
 
       results.discover = await wf.ask(
         "How do you usually find out about new movies?",

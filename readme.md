@@ -10,7 +10,7 @@ npm install @pwf/pure-work --save
 
 # What is it?
 
-Pure Work is a set of standards-based modules that help in developing web apps.
+A set of standards-based modules that help in developing web apps.
 
 ## 1. Flow
 
@@ -63,7 +63,6 @@ It wraps the `Flow` class and provides a UI for running flows.
 
 See [the demo page](https://pwfworkflow.z6.web.core.windows.net/) for a live demo.
 
-
 ### 1.4 Advanced Usage (`Flow` class)
 
 Where `flow-ui` is a UI wrapper around the `Flow` class, the `Flow` class is UI-independent, and can be used to build everywhere.
@@ -75,13 +74,10 @@ const options = new FlowOptions(
   "test",
   this.myFlowStartingpoint.bind(this),
   (flow) => {
-    this.flow = flow;
-
-    // this.install(...)
+    // flow.install("myMethod", this.myFlowMethod.bind(this))
   }
 );
 
 const flow = Flow.factory(options);
 await flow.start();
 ```
-
