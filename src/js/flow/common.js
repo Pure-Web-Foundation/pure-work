@@ -72,23 +72,6 @@ export function EventTargetMixin(superclass) {
   };
 }
 
-/**
- * Gets an object with padded string parts for a date.
- * @param {Date} date
- * @returns { Object } {year: yyyy, month: mm, day: dd}
- */
-export function getDateStringParts(date) {
-  if (!(date instanceof Date)) date = new Date(Date.parse(date));
-
-  if (isNaN(date)) throw new TypeError("Invalid date");
-
-  return {
-    year: date.getFullYear(),
-    month: padNumber(date.getMonth() + 1, 2),
-    day: padNumber(date.getDate(), 2),
-  };
-}
-
 // clones an object and takes only 'simple' properties.
 export function takeSimpleProperties(obj) {
   if (obj === null || typeof obj !== "object") {
@@ -115,15 +98,6 @@ export function takeSimpleProperties(obj) {
     }
   }
   return clonedObj;
-}
-
-export function padNumber(num, length) {
-  let numStr = num.toString();
-  numStr = numStr.replace(".", "");
-  let diff = length - numStr.length;
-  if (diff > 0) return "0".repeat(diff) + numStr;
-
-  return numStr;
 }
 
 /**
