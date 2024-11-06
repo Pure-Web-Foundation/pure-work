@@ -1,13 +1,13 @@
-import { FlowStep } from "./step";
+import { FlowStep, FlowStepState } from "./step";
 import { FlowState } from "./state";
 import { FlowOptions } from "./options";
 import {
   takeSimpleProperties,
   TimeoutError,
   withTimeout,
-  FlowStepState,
-  EventTargetMixin
-} from "./common";
+  EventTargetMixin,
+} from "../common";
+import { BrokerFlowStateHandler } from "../broker-flow-handler";
 
 const DEFAULT_RESOLVE_DELAY = 50;
 const DEFAULT_STEP_TIMEOUT = 1000 * 60 * 30; // 30 minutes.
@@ -36,7 +36,7 @@ export class Flow extends EventTargetMixin(EventTarget) {
 
     this.#installActions();
 
-    this.#setupHooks();    
+    this.#setupHooks();
   }
 
   /**
@@ -51,6 +51,8 @@ export class Flow extends EventTargetMixin(EventTarget) {
       throw new Error("Invalid flow options.");
 
     const wf = new Flow(options);
+
+    if (wf.options.useBroker) wf.options.state = new BrokerFlowStateHandler();
 
     if (!wf.options.state) wf.options.state = new FlowState();
 
@@ -80,6 +82,9 @@ export class Flow extends EventTargetMixin(EventTarget) {
 
   //Creates a flow step.
   static #action(fn, baseOptions) {
+    /**
+     * @type { Function} 
+     */
     const wrapperFunction = async function (topic, options) {
       if (this.steps.length === 0) {
         this.fire("flow-initialized");
@@ -146,6 +151,10 @@ export class Flow extends EventTargetMixin(EventTarget) {
    */
   get options() {
     return this.#options;
+  }
+
+  get id() {
+    return this.#options.id;
   }
 
   /**

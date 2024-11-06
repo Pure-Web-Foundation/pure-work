@@ -1,4 +1,15 @@
-import { EventTargetMixin, FlowStepState } from "./common";
+import { EventTargetMixin } from "../common";
+
+export const FlowStepState = Object.freeze({
+  Unknown: "unknown",
+  Initialized: "initialized",
+  Started: "started",
+  Running: "running",
+  Completing: "completing",
+  Completed: "completed",
+  Replayed: "replayed",
+});
+
 
 export class FlowStep extends EventTargetMixin(EventTarget) {
   #options;

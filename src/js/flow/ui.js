@@ -1,10 +1,14 @@
-import { EventTargetMixin, scrollIntoView, FlowStepState } from "./common";
+import { EventTargetMixin, scrollIntoView } from "../common";
 import { LitElement, html, nothing } from "lit";
+import { FlowStepState } from "./index";
 import { Flow } from "./index";
 import { repeat } from "lit/directives/repeat.js";
 import "./ui-step";
 const htmlElm = document.documentElement;
 
+/**
+ * @event flow-step-rendered - Fired when a step is rendered. Use preventDefault() to bypass default behavior
+ */
 export class FlowUI extends EventTargetMixin(LitElement) {
   #flow;
 
@@ -45,6 +49,14 @@ export class FlowUI extends EventTargetMixin(LitElement) {
           if (stepElement) {
             scrollIntoView(stepElement).then(() => {
               stepElement.querySelector("[name]")?.focus();
+              
+              // remove completed steps unless 'flow-step-rendered' event is prevented.
+              const renderedEvent = wf.fire("flow-step-rendered", step);
+              if (!renderedEvent.defaultPrevented) {
+                this.querySelectorAll("flow-ui-step.completed").forEach((u) => {
+                  u.remove();
+                });
+              }
             });
           }
         });
@@ -347,10 +359,10 @@ export const UI = {
     renderInput: selectMany,
     transform: {
       out: (value) => {
-        return value
+        return value;
       },
-      in: (text) => {
-        return text?.split(",") ?? [];
+      in: (value) => {
+        return Array.isArray(value) ? value : value?.split(",") ?? [];
       },
     },
   },

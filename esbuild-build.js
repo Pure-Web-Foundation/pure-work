@@ -22,10 +22,10 @@ const config = {
   },
 };
 
-const run = async () => {
-  const ctx = await esbuild.context(config);
-  await ctx.rebuild();
+const build = async () => {
+  await esbuild.build(config);
 };
 
-run();
-console.log("Build completed");
+build().then(() => {
+  console.log("Build ready.");
+});

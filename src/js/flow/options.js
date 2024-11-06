@@ -34,6 +34,11 @@ export class FlowOptions {
   }
 
   /**
+   * Set to true to use Broker 
+   */
+  useBroker = false;
+
+  /**
    * The time to pause before resolving a step and continuing with the next one.
    */
   resolveDelay = 200;

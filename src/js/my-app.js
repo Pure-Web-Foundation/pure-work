@@ -1,19 +1,35 @@
 import { html, LitElement } from "lit";
-import { FlowOptions } from "./flow";
+import { FlowOptions } from "./flow/options";
 import { repeat } from "lit/directives/repeat.js";
 import { UI as baseUI } from "./flow/ui";
+import { Broker } from "./broker/index";
+
 
 const UI = {
   ...baseUI,
   lover: {
     ...baseUI.selectOne,
     items: ["Not at all", "A bit", "Sure", "Love them!"],
-    id: "movie-lover",
+    store: "lover",
   },
   location: {
     ...baseUI.selectOne,
     items: ["At home", "In a theater", "No difference"],
+    store: "location",
   },
+  locationWhy: {
+    ...baseUI.longtext,
+    store: "location-why",
+  },
+  actor: {
+    ...baseUI.text,
+    store: "actor",
+  },
+  favorite: {
+    ...baseUI.text,
+    store: "favorite",
+  },
+
   theater: {
     ...baseUI.selectOne,
     items: [
@@ -26,26 +42,36 @@ const UI = {
       "Never",
       "I'm not sure",
     ],
+    store: "theater",
   },
   factor: {
     ...baseUI.selectOne,
     items: ["Genre", "Director", "Reviews", "Other"],
+    store: "factor",
+  },
+  crucialFactor: {
+    ...baseUI.longtext,
+    store: "crucial",
   },
   social: {
     ...baseUI.selectOne,
     items: ["Alone", "With my partner", "In a group"],
+    store: "social",
   },
   importance: {
     ...baseUI.selectOne,
     items: ["Not important at all", "Somewhat important", "Very important"],
+    store: "importance",
   },
   news: {
     ...baseUI.selectOne,
     items: ["Trailers", "Reviews", "Social Media", "Friends", "Other"],
+    store: "news",
   },
   streaming: {
     ...baseUI.selectMany,
     items: ["Netflix", "Hulu", "Amazon Prime", "HBO Max", "Disney+", "Other"],
+    store: "streaming",
   },
   genres: {
     ...baseUI.selectMany,
@@ -60,18 +86,23 @@ const UI = {
       "Sci-Fi",
       "Thriller",
     ],
+    store: "genres",
   },
   results: {
     wait: 6000,
     show: (step) => {
       const items = Object.entries(step.topic);
+      const renderValue = (value) => {
+        if (Array.isArray(value)) return value.join(", ");
 
+        return value;
+      };
       return html`
         <section>
           <dl class="key-value">
             ${repeat(items, ([key, value]) => {
               return html`<dt>${key}</dt>
-                <dd>${value}</dd>`;
+                <dd>${renderValue(value)}</dd>`;
             })}
           </dl>
         </section>
@@ -83,6 +114,28 @@ const UI = {
 customElements.define(
   "my-app",
   class MyApp extends LitElement {
+    constructor() {
+      super();
+
+      const movie = {
+        lover: "Love them!",
+        location: "In a theater",
+        actor: "Jodie Foster",
+        favorite: "One Flew Over the Cuckoo's Nest",
+        genres: ["Filmhouse", "Drama"],
+        theater: "Once every couple of months",
+        streaming: ["Amazon Prime", "Netflix", "HBO Max"],
+      };
+
+      Broker.instance
+        .subscribe(`flow-step-load`, async (data) => {
+          if (data.scope === "movieSurvey") data.value = movie[data.key];
+        })
+        .subscribe(`flow-step-save`, (data) => {
+          if (data.scope === "movieSurvey") movie[data.key] = data.value;
+        });
+    }
+
     createRenderRoot() {
       return this;
     }
@@ -119,7 +172,7 @@ customElements.define(
 
     // returns options for a workflow
     get movieSurveyFlow() {
-      return new FlowOptions(
+      const options = new FlowOptions(
         "movieSurvey",
         this.movieSurvey.bind(this),
         (flow) => {
@@ -133,6 +186,9 @@ customElements.define(
           });
         }
       );
+
+      options.useBroker = true; // use Broker (pub-sub singleton message bus)
+      return options;
     }
 
     // custom action
@@ -145,22 +201,20 @@ customElements.define(
 
       setTimeout(() => {
         step.resolve();
-      }, step.options.timeout ?? 3000);
+      }, step.options.timeout ?? 2000);
     }
 
     // entrypoint (first step) of the workflow
     async movieSurvey(wf) {
-      
-
       await wf.text("Welcome to the movie survey!");
 
       const results = {
-        movieLover: await wf.ask("Are you a movie lover?", UI.lover)
-      }
+        movieLover: await wf.ask("Are you a movie lover?", UI.lover),
+      };
 
       results.best = await wf.ask(
         "What is your favorite movie of all time?",
-        UI.text
+        UI.favorite
       );
 
       results.genres = await wf.ask(
@@ -178,22 +232,23 @@ customElements.define(
         UI.location
       );
 
-      results.why = await wf.ask("Why?", UI.longtext);
+      results.why = await wf.ask("Why?", UI.locationWhy);
 
       results.factor = await wf.ask(
         "What is the most important factor when choosing a movie to watch?",
         UI.factor
       );
 
-      if(results.factor=== "Other")
-        results.factor = await wf.ask("What is the crucial factor in choosing a movie?", UI.longtext)
+      if (results.factor === "Other")
+        results.factor = await wf.ask(
+          "What is the crucial factor in choosing a movie?",
+          UI.crucialFactor
+        );
 
       results.actor = await wf.ask(
         "Who is your favorite actor or actress?",
-        UI.text
+        UI.actor
       );
-
-      
 
       results.discover = await wf.ask(
         "How do you usually find out about new movies?",

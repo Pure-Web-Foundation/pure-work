@@ -1,13 +1,3 @@
-export const FlowStepState = Object.freeze({
-  Unknown: "unknown",
-  Initialized: "initialized",
-  Started: "started",
-  Running: "running",
-  Completing: "completing",
-  Completed: "completed",
-  Replayed: "replayed",
-});
-
 /**
  * Animates an element into view async and returns when the enimation has completed
  * @param {HTMLElement} element
@@ -43,11 +33,11 @@ export function EventTargetMixin(superclass) {
      * @param {Object} detail Optional details to pass along with event
      */
     fire(eventName, detail = {}) {
-      this.dispatchEvent(
-        new CustomEvent(eventName, {
-          detail: detail || {},
-        })
-      );
+      const ev = new CustomEvent(eventName, {
+        detail: detail || {},
+      });
+      this.dispatchEvent(ev);
+      return ev;
     }
 
     /**

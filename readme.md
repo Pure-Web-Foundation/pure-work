@@ -81,3 +81,29 @@ const options = new FlowOptions(
 const flow = Flow.factory(options);
 await flow.start();
 ```
+
+## 2. Broker 
+
+A simple singleton message broker based on regular, vanilla DOM eventing.
+
+Acts a a pub/sub messaging system, where actors can publish messages in topics, and consumers can subscribe to topics and listen for new messages on them.
+
+`Broker` is available as a global singleton.
+
+
+### Subscribing to a topic
+```js
+const broker = new Broker()
+broker
+  .subscribe(`my-topic`, async (data) => {
+    // do something with the data
+  })
+```
+
+### Publishing on a topic
+```js
+broker.publish(`my-topic`, {
+  my: "data"
+})
+```
+

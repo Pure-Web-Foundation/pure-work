@@ -1,5 +1,6 @@
 import { nothing, LitElement } from "lit";
-import { EventTargetMixin, FlowStepState } from "./common";
+import { EventTargetMixin } from "../common";
+import { FlowStepState } from "./step.js";
 
 customElements.define(
   "flow-ui-step",

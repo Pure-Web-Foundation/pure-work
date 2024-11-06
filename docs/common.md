@@ -1,14 +1,3 @@
-## Classes
-
-<dl>
-<dt><a href="#Flow">Flow</a></dt>
-<dd><p>Flow Engine, implemented using chained promises.</p>
-</dd>
-<dt><a href="#FlowState">FlowState</a></dt>
-<dd><p>FlowState class -  This class is used to store flow state information.</p>
-</dd>
-</dl>
-
 ## Functions
 
 <dl>
@@ -31,39 +20,6 @@
 <dd><p>Wraps a promise in a new promise that adds a timeout to the promise execution.</p>
 </dd>
 </dl>
-
-<a name="FlowState"></a>
-
-## FlowState
-FlowState class -  This class is used to store flow state information.
-
-**Kind**: global class  
-
-* [FlowState](#FlowState)
-    * [.loadStep(step)](#FlowState+loadStep) ⇒ <code>Object</code>
-    * [.saveStep(step)](#FlowState+saveStep)
-
-<a name="FlowState+loadStep"></a>
-
-### flowState.loadStep(step) ⇒ <code>Object</code>
-Loads a step
-
-**Kind**: instance method of [<code>FlowState</code>](#FlowState)  
-
-| Param | Type |
-| --- | --- |
-| step | <code>FlowStep</code> | 
-
-<a name="FlowState+saveStep"></a>
-
-### flowState.saveStep(step)
-Saves a step
-
-**Kind**: instance method of [<code>FlowState</code>](#FlowState)  
-
-| Param | Type |
-| --- | --- |
-| step | <code>FlowStep</code> | 
 
 <a name="scrollIntoView"></a>
 
