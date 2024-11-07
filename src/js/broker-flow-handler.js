@@ -25,6 +25,7 @@ export class BrokerFlowStateHandler extends FlowState {
         scope: step.flow.id,
         key: step.options.store,
         value: step.value,
+        isModified: step.hasChangedValue,
       });
     }
   }

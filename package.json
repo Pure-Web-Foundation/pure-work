@@ -1,6 +1,6 @@
 {
   "name": "@pwf/pure-work",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Pure Vanilla Web App work processing",
   "main": "./public/assets/js/index.js",
   "homepage": "https://pwfworkflow.z6.web.core.windows.net/",

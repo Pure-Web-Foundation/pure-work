@@ -10,7 +10,6 @@ export const FlowStepState = Object.freeze({
   Replayed: "replayed",
 });
 
-
 export class FlowStep extends EventTargetMixin(EventTarget) {
   #options;
   #completedAt;
@@ -20,6 +19,7 @@ export class FlowStep extends EventTargetMixin(EventTarget) {
   #id;
   #name;
   #isGivenName;
+  #hasChangedValue = false;
   #key;
   #state = FlowStepState.Unknown;
   #resolve = () => {};
@@ -104,7 +104,7 @@ export class FlowStep extends EventTargetMixin(EventTarget) {
     return this.#id;
   }
 
-  get flow(){
+  get flow() {
     return this.#flow;
   }
 
@@ -197,16 +197,24 @@ export class FlowStep extends EventTargetMixin(EventTarget) {
       if (this.options.transform?.out)
         stepResult = this.options.transform.out(stepResult);
 
+      this.#hasChangedValue = this.#value != stepResult;
+
       this.#value = stepResult;
+
       resolve(stepResult);
     }
 
-    this._setState(
-      isReplay ? FlowStepState.Replayed : FlowStepState.Completed
-    );
+    this._setState(isReplay ? FlowStepState.Replayed : FlowStepState.Completed);
 
     this.#completedAt = new Date().toJSON();
     if (!isReplay) await this.#flow.options.state.saveStep(this);
+  }
+
+  /**
+   * Returns true if the value has been modified.
+   */
+  get hasChangedValue() {
+    return this.#hasChangedValue;
   }
 
   /**
@@ -236,8 +244,7 @@ export class FlowStep extends EventTargetMixin(EventTarget) {
       }
 
       continue() {
-        if (this.#step.state === FlowStepState.Running)
-          this.#step.resolve();
+        if (this.#step.state === FlowStepState.Running) this.#step.resolve();
         else throw new Error(`Cannot resolve step, it is not running`);
       }
     };
