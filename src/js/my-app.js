@@ -129,11 +129,21 @@ customElements.define(
 
       Broker.instance
         .subscribe(`flow-step-load`, async (data) => {
-          if (data.scope === "movieSurvey") data.value = movie[data.key];
+          data.value = movie[data.key];
         })
         .subscribe(`flow-step-save`, (data) => {
-          if (data.scope === "movieSurvey") movie[data.key] = data.value;
+          console.log(`${data.key}: ${data.value}`);
+
+          if(data.isModified){
+            movie[data.key] = data.value;
+          }
+          else
+           console.log(`No changes in ${data.key}`);
         });
+
+        setTimeout(() => {
+          this.start();
+        }, 1);
     }
 
     createRenderRoot() {
@@ -207,10 +217,9 @@ customElements.define(
     // entrypoint (first step) of the workflow
     async movieSurvey(wf) {
       await wf.text("Welcome to the movie survey!");
-
-      const results = {
-        movieLover: await wf.ask("Are you a movie lover?", UI.lover),
-      };
+      const results = {}
+      
+      results.movieLover = await wf.ask("Are you a movie lover?", UI.lover),
 
       results.best = await wf.ask(
         "What is your favorite movie of all time?",
