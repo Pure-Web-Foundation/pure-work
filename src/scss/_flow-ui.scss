@@ -1,23 +1,7 @@
 /* general flow */
 
 [data-flow-ui-type] {
-    [data-flow-inner] {
-        position: relative;
-
-        &::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            width: 100vw;
-            height: calc(100% - 50px);
-            background-position: center;
-            background-image: url("/assets/img/ico-128.png");
-            background-repeat: no-repeat;
-            opacity: 0;
-            transition: opacity 0.4s ease-in-out;
-            transition-delay: 0.2s;
-            pointer-events: none;
-        }
+    [data-flow-inner] {       
 
         &.busy {
             &::after {

@@ -2,16 +2,15 @@ import { FlowState } from "./flow/state";
 import { Broker } from "./broker/index";
 
 export class BrokerFlowStateHandler extends FlowState {
-   
   async loadStep(step) {
     if (step.options.store) {
       const details = {
         scope: step.flow.id,
         key: step.options.store,
         value: step.value,
-
       };
-      Broker.instance.publish(`flow-step-load`, details);
+      await Broker.instance.publish(`flow-step-load`, details);
+
       return details.value;
     }
   }
@@ -22,7 +21,7 @@ export class BrokerFlowStateHandler extends FlowState {
    */
   async saveStep(step) {
     if (step.options.store) {
-      Broker.instance.publish(`flow-step-save`, {
+      await Broker.instance.publish(`flow-step-save`, {
         scope: step.flow.id,
         key: step.options.store,
         value: step.value,
