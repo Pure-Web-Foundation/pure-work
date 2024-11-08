@@ -62,12 +62,8 @@ export class FlowStep extends EventTargetMixin(EventTarget) {
 
   async initialize() {
     let value = await this.#flow.options.state.loadStep(this);
-
-    if (value ?? null) {
-      if (this.options.transform?.in) value = this.options.transform.in(value);
-
-      this.#value = value;
-    }
+    if (this.options.transform?.in) value = this.options.transform.in(value);
+    this.#value = value;
   }
 
   get resolve() {

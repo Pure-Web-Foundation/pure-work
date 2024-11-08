@@ -4,7 +4,6 @@ import { repeat } from "lit/directives/repeat.js";
 import { UI as baseUI } from "./flow/ui";
 import { Broker } from "./broker/index";
 
-
 const UI = {
   ...baseUI,
   lover: {
@@ -49,6 +48,12 @@ const UI = {
     items: ["Genre", "Director", "Reviews", "Other"],
     store: "factor",
   },
+
+  fanCrush: {
+    ...baseUI.selectOne,
+    items: ["Not at all", "A bit", "Sure", "Fan crush!"]
+  },
+
   crucialFactor: {
     ...baseUI.longtext,
     store: "crucial",
@@ -134,16 +139,14 @@ customElements.define(
         .subscribe(`flow-step-save`, (data) => {
           console.log(`${data.key}: ${data.value}`);
 
-          if(data.isModified){
+          if (data.isModified) {
             movie[data.key] = data.value;
-          }
-          else
-           console.log(`No changes in ${data.key}`);
+          } else console.log(`No changes in ${data.key}`);
         });
 
-        setTimeout(() => {
-          this.start();
-        }, 1);
+      setTimeout(() => {
+        this.start();
+      }, 1);
     }
 
     createRenderRoot() {
@@ -217,14 +220,13 @@ customElements.define(
     // entrypoint (first step) of the workflow
     async movieSurvey(wf) {
       await wf.text("Welcome to the movie survey!");
-      const results = {}
-      
-      results.movieLover = await wf.ask("Are you a movie lover?", UI.lover),
+      const results = {};
 
-      results.best = await wf.ask(
-        "What is your favorite movie of all time?",
-        UI.favorite
-      );
+      (results.movieLover = await wf.ask("Are you a movie lover?", UI.lover)),
+        (results.best = await wf.ask(
+          "What is your favorite movie of all time?",
+          UI.favorite
+        ));
 
       results.genres = await wf.ask(
         "What are your favorite movie genres?",
@@ -258,6 +260,8 @@ customElements.define(
         "Who is your favorite actor or actress?",
         UI.actor
       );
+
+      results.fanCrush = await wf.ask("Do you have a fan crush?", UI.fanCrush);
 
       results.discover = await wf.ask(
         "How do you usually find out about new movies?",

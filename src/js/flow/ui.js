@@ -311,6 +311,10 @@ ${step.value ?? ""}</textarea
 
 const selectOne = (step) => {
   const defaultSelected = step.value ? -1 : 0;
+
+  if(!step.options.items || !Array.isArray(step.options.items)) 
+    throw new Error("No items array passed");
+
   return html`
     <fieldset data-radio>
       ${repeat(step.options.items, (item, index) => {
