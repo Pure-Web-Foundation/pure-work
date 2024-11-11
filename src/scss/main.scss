@@ -21,6 +21,7 @@ textarea {
     padding: var(--pad-default);
     border-radius: var(--rad-default);
     width: fit-content;
+    outline: none;
 }
 
 textarea {
@@ -50,7 +51,6 @@ textarea::placeholder {
 button {
     border: 0;
     padding: 0.6rem 1rem;
-    background-color: #34a6b8;
     color: white;
     text-transform: uppercase;
     cursor: pointer;
@@ -66,6 +66,15 @@ button {
         transform: translate(0.1rem, 0.1rem);
         transition: 0.2s ease-in-out;
     }
+
+    &.primary {
+        background-color: #34a6b8;
+    }
+
+    &.secondary {
+        border: 2px solid #34a6b8;
+        background-color: transparent;
+    }
 }
 
 .flex {
@@ -80,6 +89,7 @@ button {
     form,
     section {
         background-color: #333;
+        --label-color: #ccc;
     }
 }
 
@@ -87,6 +97,7 @@ button {
     form,
     section {
         background-color: #eee;
+        --label-color: #333;
     }
 }
 

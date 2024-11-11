@@ -183,7 +183,7 @@ class Form {
       ${this.renderControl()}
 
       <fieldset data-flow-continue>
-        <button name="continue" title="Continue" class="green" type="submit">
+        <button name="continue" title="Continue" class="primary" type="submit">
           Continue
           <span class="arrow">↲</span>
         </button>
@@ -202,7 +202,7 @@ class Form {
       name="back"
       title="Back"
       type="button"
-      class="white"
+      class="secondary"
       tabindex="-1"
     >
       Back
@@ -316,7 +316,7 @@ const selectOne = (step) => {
     throw new Error("No items array passed");
 
   return html`
-    <fieldset data-radio>
+    <fieldset data-tick>
       ${repeat(step.options.items, (item, index) => {
         return html`<label>
           <input
@@ -335,7 +335,7 @@ const selectOne = (step) => {
 const selectMany = (step) => {
   const defaultSelected = [...(step.value ?? [])];
   return html`
-    <fieldset data-radio>
+    <fieldset data-tick>
       ${repeat(step.options.items, (item) => {
         return html`<label>
           <input

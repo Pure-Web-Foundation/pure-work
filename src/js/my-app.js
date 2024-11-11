@@ -18,7 +18,7 @@ const UI = {
   },
   locationWhy: {
     ...baseUI.longtext,
-    store: "location-why",
+    store: "locationWhy",
   },
   actor: {
     ...baseUI.text,
@@ -51,7 +51,7 @@ const UI = {
 
   fanCrush: {
     ...baseUI.selectOne,
-    items: ["Not at all", "A bit", "Sure", "Fan crush!"]
+    items: ["Not at all", "A bit", "Sure", "Fan crush!"],
   },
 
   crucialFactor: {
@@ -122,6 +122,7 @@ customElements.define(
     constructor() {
       super();
 
+
       const movie = {
         lover: "Love them!",
         location: "In a theater",
@@ -130,8 +131,10 @@ customElements.define(
         genres: ["Filmhouse", "Drama"],
         theater: "Once every couple of months",
         streaming: ["Amazon Prime", "Netflix", "HBO Max"],
+        locationWhy: "Test"
       };
 
+      // simulate storage via broker
       Broker.instance
         .subscribe(`flow-step-load`, async (data) => {
           data.value = movie[data.key];
@@ -219,7 +222,9 @@ customElements.define(
 
     // entrypoint (first step) of the workflow
     async movieSurvey(wf) {
-      await wf.text("Welcome to the movie survey!");
+      await wf.text("Welcome to the movie survey!", {
+        backTarget: false,
+      });
       const results = {};
 
       (results.movieLover = await wf.ask("Are you a movie lover?", UI.lover)),

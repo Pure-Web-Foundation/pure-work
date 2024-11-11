@@ -1,8 +1,7 @@
 /* general flow */
 
 [data-flow-ui-type] {
-    [data-flow-inner] {       
-
+    [data-flow-inner] {
         &.busy {
             &::after {
                 transition: opacity 0.2s ease;
@@ -46,10 +45,10 @@
                 display: unset;
             }
 
-            [data-flow-continue]{
+            [data-flow-continue] {
                 opacity: 0;
                 transition: opactiy 1s ease;
-                transition-delay: .5s;
+                transition-delay: 0.5s;
             }
         }
 
@@ -127,12 +126,13 @@
             }
         }
 
-        fieldset[data-radio] {
+        fieldset[data-tick] {
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
             align-items: flex-start;
             > label {
+                color: var(--label-color);
                 display: flex;
                 gap: 0.5rem;
                 flex-direction: row;
@@ -143,6 +143,16 @@
                 > input {
                     width: 24px;
                     height: 24px;
+                }
+
+                &:focus-within {
+                    span {
+                        color: var(--color-accent);
+                        font-weight: 600;
+                    }
+                    input {
+                        accent-color: var(--color-accent);
+                    }
                 }
             }
         }
