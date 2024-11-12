@@ -11,7 +11,8 @@
     [data-flow-inner] {
         height: 100vh;
         overflow-y: scroll;
-        scroll-snap-type: y mandatory;
+        //scroll-snap-type: y mandatory;
+        scroll-snap-type: proximity;
 
         flow-ui-step {
             height: 100vh;
