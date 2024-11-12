@@ -200,10 +200,19 @@ customElements.define(
           flow.on("flow-ended", (e) => {
             this.load = null;
           });
+
+          flow.on("step-ui-rendered", e=>{
+            const form = e.detail.element.querySelector("form");
+            if(form){
+              form.querySelector("button.primary").classList.add("green");
+              form.querySelector("button.secondary").classList.add("white");;
+            }
+          })
         }
       );
 
       options.useBroker = true; // use Broker (pub-sub singleton message bus)
+      
       return options;
     }
 

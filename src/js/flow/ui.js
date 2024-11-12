@@ -50,8 +50,11 @@ export class FlowUI extends EventTargetMixin(LitElement) {
             scrollIntoView(stepElement).then(() => {
               stepElement.querySelector("[name]")?.focus();
               
-              // remove completed steps unless 'flow-step-rendered' event is prevented.
-              const renderedEvent = wf.fire("flow-step-rendered", step);
+              // remove completed steps unless 'step-ui-rendered' event is prevented.
+              const renderedEvent = wf.fire("step-ui-rendered", {
+                step: step,
+                element: stepElement
+              });
               if (!renderedEvent.defaultPrevented) {
                 this.querySelectorAll("flow-ui-step.completed").forEach((u) => {
                   u.remove();
