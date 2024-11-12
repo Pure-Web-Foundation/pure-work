@@ -49,11 +49,11 @@ export class FlowUI extends EventTargetMixin(LitElement) {
           if (stepElement) {
             scrollIntoView(stepElement).then(() => {
               stepElement.querySelector("[name]")?.focus();
-              
+
               // remove completed steps unless 'step-ui-rendered' event is prevented.
               const renderedEvent = wf.fire("step-ui-rendered", {
                 step: step,
-                element: stepElement
+                element: stepElement,
               });
               if (!renderedEvent.defaultPrevented) {
                 this.querySelectorAll("flow-ui-step.completed").forEach((u) => {
@@ -315,7 +315,7 @@ ${step.value ?? ""}</textarea
 const selectOne = (step) => {
   const defaultSelected = step.value ? -1 : 0;
 
-  if(!step.options.items || !Array.isArray(step.options.items)) 
+  if (!step.options.items || !Array.isArray(step.options.items))
     throw new Error("No items array passed");
 
   return html`

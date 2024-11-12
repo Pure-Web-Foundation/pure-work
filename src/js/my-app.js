@@ -122,7 +122,6 @@ customElements.define(
     constructor() {
       super();
 
-
       const movie = {
         lover: "Love them!",
         location: "In a theater",
@@ -131,7 +130,7 @@ customElements.define(
         genres: ["Filmhouse", "Drama"],
         theater: "Once every couple of months",
         streaming: ["Amazon Prime", "Netflix", "HBO Max"],
-        locationWhy: "Test"
+        locationWhy: "Test",
       };
 
       // simulate storage via broker
@@ -201,18 +200,14 @@ customElements.define(
             this.load = null;
           });
 
-          flow.on("step-ui-rendered", e=>{
-            const form = e.detail.element.querySelector("form");
-            if(form){
-              form.querySelector("button.primary").classList.add("green");
-              form.querySelector("button.secondary").classList.add("white");;
-            }
-          })
+          flow.on("step-ui-rendered", (e) => {
+            // work with rendered ui
+          });
         }
       );
 
       options.useBroker = true; // use Broker (pub-sub singleton message bus)
-      
+
       return options;
     }
 
