@@ -90,11 +90,9 @@ Acts a a pub/sub messaging system, where actors can publish messages in topics, 
 
 `Broker` is available as a global singleton.
 
-
 ### Subscribing to a topic
 ```js
-const broker = new Broker()
-broker
+Broker.instance
   .subscribe(`my-topic`, async (data) => {
     // do something with the data
   })
@@ -102,7 +100,7 @@ broker
 
 ### Publishing on a topic
 ```js
-broker.publish(`my-topic`, {
+Broker.instance.publish(`my-topic`, {
   my: "data"
 })
 ```
