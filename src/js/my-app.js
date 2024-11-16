@@ -160,6 +160,7 @@ customElements.define(
     };
 
     render() {
+
       if (!this.load) {
         return html` <h1>Movie survey</h1>
           <p>
@@ -296,7 +297,7 @@ customElements.define(
 
       await wf.show(results, UI.results);
 
-      await wf.end();
+      
     }
   }
 );
