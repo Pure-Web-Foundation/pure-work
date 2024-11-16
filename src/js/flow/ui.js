@@ -37,6 +37,7 @@ export class FlowUI extends EventTargetMixin(LitElement) {
       wf.on("flow-ended", () => {
         htmlElm.removeAttribute("data-flow");
         htmlElm.removeAttribute("data-flow-ui-type");
+        this.currentStep = null
       })
         .on("flow-started", () => {
           htmlElm.setAttribute("data-flow", wf.options.id);
@@ -69,13 +70,13 @@ export class FlowUI extends EventTargetMixin(LitElement) {
   }
 
   render() {
+    if (!this.options) return nothing;
+    if (!this.#flow?.steps?.length) return nothing;
+
     return html`<div data-flow-inner>${this.renderFlow()}</div> `;
   }
 
   renderFlow() {
-    if (!this.options) return html`<div>Flow ended</div>`;
-
-    if (!this.#flow?.steps) return;
 
     return html`
       ${repeat(this.#flow.steps, (step, index) => {
@@ -110,10 +111,10 @@ export class FlowUI extends EventTargetMixin(LitElement) {
     wf.on("step-started", () => {
       this.requestUpdate();
     })
-      .on("flow-ended", (e) => {
-        const step = e.detail.step;
-        step.render = () => html`${step.topic ?? ""}`;
-      })
+      // .on("flow-ended", (e) => {
+      //   const step = e.detail.step;
+      //   step.render = () => html`${step.topic ?? ""}`;
+      // })
       .on("enter-detected", () => {
         const form = this.querySelector(
           "[data-flow-inner] .flow-step:not(.completed) form"

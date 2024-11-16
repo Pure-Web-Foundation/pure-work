@@ -275,7 +275,6 @@ export class Flow extends EventTargetMixin(EventTarget) {
     try {
       return await this.options.run(this).then(()=>{
         this.end();
-        debugger;
       });
     } catch (ex) {
       if (ex instanceof TimeoutError) this.fire("flow-timeout");
