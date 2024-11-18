@@ -37,7 +37,7 @@ export class FlowUI extends EventTargetMixin(LitElement) {
       wf.on("flow-ended", () => {
         htmlElm.removeAttribute("data-flow");
         htmlElm.removeAttribute("data-flow-ui-type");
-        this.currentStep = null
+        this.currentStep = null;
       })
         .on("flow-started", () => {
           htmlElm.setAttribute("data-flow", wf.options.id);
@@ -77,7 +77,6 @@ export class FlowUI extends EventTargetMixin(LitElement) {
   }
 
   renderFlow() {
-
     return html`
       ${repeat(this.#flow.steps, (step, index) => {
         return html`<flow-ui-step
@@ -187,12 +186,12 @@ class Form {
       ${this.renderControl()}
 
       <fieldset data-flow-continue>
+        ${this.renderBackButton()}
+
         <button name="continue" title="Continue" class="primary" type="submit">
           Continue
           <span class="arrow">↲</span>
         </button>
-
-        ${this.renderBackButton()}
       </fieldset>
 
       ${this.renderFootnotes()}

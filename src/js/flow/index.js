@@ -70,6 +70,8 @@ export class Flow extends EventTargetMixin(EventTarget) {
   #setupHooks() {
     this._keydown = (e) => {
       if (e.key === "Enter") {
+        if (["TEXTAREA"].includes(e.target?.nodeName) || e.target.closest("[data-prevent-enter]")) return;
+
         this.fire("enter-detected");
       }
     };
@@ -83,7 +85,7 @@ export class Flow extends EventTargetMixin(EventTarget) {
   //Creates a flow step.
   static #action(fn, baseOptions) {
     /**
-     * @type { Function} 
+     * @type { Function}
      */
     const wrapperFunction = async function (topic, options) {
       if (this.steps.length === 0) {
@@ -273,7 +275,7 @@ export class Flow extends EventTargetMixin(EventTarget) {
     this.#stepIndex = -1;
 
     try {
-      return await this.options.run(this).then(()=>{
+      return await this.options.run(this).then(() => {
         this.end();
       });
     } catch (ex) {
