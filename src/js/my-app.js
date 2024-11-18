@@ -9,7 +9,7 @@ const UI = {
   lover: {
     ...baseUI.selectOne,
     items: ["Not at all", "A bit", "Sure", "Love them!"],
-    store: "lover",
+    store: "lover"
   },
   location: {
     ...baseUI.selectOne,
@@ -18,7 +18,7 @@ const UI = {
   },
   locationWhy: {
     ...baseUI.longtext,
-    store: "locationWhy",
+    store: "locationWhy"
   },
   actor: {
     ...baseUI.text,
@@ -160,7 +160,6 @@ customElements.define(
     };
 
     render() {
-
       if (!this.load) {
         return html` <h1>Movie survey</h1>
           <p>
@@ -296,8 +295,6 @@ customElements.define(
       await wf.text("Results coming up....");
 
       await wf.show(results, UI.results);
-
-      
     }
   }
 );

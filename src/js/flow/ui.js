@@ -241,7 +241,7 @@ class Form {
     const step = this.step;
     if (step.options.autoContinue) {
       setTimeout(() => {
-        step.resolve(1);
+        step.resolve(step.value ?? 1);
       }, this.calculateTime(step));
     }
     switch (step.options.type) {
@@ -282,6 +282,9 @@ class Form {
 
   calculateTime(step) {
     const wordCount = step.topic.split(" ").length;
+    if((typeof step.options.autoContinue) === "number")
+      return step.options.autoContinue;
+
     return 2000 + wordCount * 150;
   }
 }
