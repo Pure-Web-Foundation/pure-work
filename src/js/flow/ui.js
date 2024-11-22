@@ -1,4 +1,4 @@
-import { EventTargetMixin, scrollIntoView } from "../common";
+import { EventTargetMixin, parseBoolean, scrollIntoView } from "../common";
 import { LitElement, html, nothing } from "lit";
 import { FlowStepState } from "./index";
 import { Flow } from "./index";
@@ -290,29 +290,90 @@ class Form {
 }
 
 const input = (step) => {
+  // return html`<input
+  //   id="${step.id}"
+  //   required
+  //   spellcheck="false"
+  //   pattern="${step.options.pattern ?? nothing}"
+  //   name="step"
+  //   value="${step.value ?? ""}"
+  //   placeholder=${step.options.placeholder}
+  //   type="${step.options.type}"
+  // />`;
+
+  const _N = nothing;
+
   return html`<input
-    id="${step.id}"
-    required
-    spellcheck="false"
-    pattern="${step.options.pattern ?? nothing}"
+    id="${step.id || _N}"
+    autocomplete="${step.options.autocomplete ? "on" : "off"}"
     name="step"
-    value="${step.value ?? ""}"
-    placeholder=${step.options.placeholder}
-    type="${step.options.type}"
+    type="${step.options.type || _N}"
+    value="${step.value || _N}"
+    class="${step.options.class || _N}"
+    placeholder="${step.options.placeholder || _N}"
+    ?required=${parseBoolean(step.options.required ?? true)}
+    ?hidden=${parseBoolean(step.options.hidden)}
+    ?readonly="${parseBoolean(step.options.readonly)}"
+    pattern="${step.options.pattern || _N}"
+    list="${step.options.list || _N}"
+    max="${step.options.max || _N}"
+    maxlength="${step.options.maxlength || _N}"
+    minlength="${step.options.minlength || _N}"
+    min="${step.options.min || _N}"
+    step="${step.options.step || _N}"
+    autocapitalize="${step.options.autocapitalize || _N}"
+    accesskey="${step.options.accesskey || _N}"
+    lang="${step.options.lang || _N}"
+    role="${step.options.role || _N}"
+    slot="${step.options.slot || _N}"
+    spellcheck="${step.options.spellcheck || _N}"
+    style="${step.options.style || _N}"
+    tabindex="${step.options.tabindex || _N}"
+    title="${step.options.title || _N}"
+    translate="${step.options.translate || _N}"
   />`;
 };
 
+
 const longText = (step) => {
-  return html`<textarea
-    id="${step.id}"
-    required
-    spellcheck="false"
-    name="step"
-    rows="${step.options.rows ?? 6}"
-    placeholder=${step.options.placeholder}
-  >
-${step.value ?? ""}</textarea
-  >`;
+//   return html`<textarea
+//     id="${step.id}"
+//     required
+//     spellcheck="false"
+//     name="step"
+//     rows="${step.options.rows ?? 6}"
+//     placeholder=${step.options.placeholder}
+//   >
+// ${step.value ?? ""}</textarea
+//   >`;
+
+const _N = nothing;
+    return html`<textarea
+      id="${step.id || _N}"
+      autocomplete="${step.options.autocomplete ? "on" : "off"}"      
+      name="step"
+      class="${step.options.class || _N}"
+      placeholder="${step.options.placeholder}"
+      ?required=${parseBoolean(step.options.required ?? true)}
+      ?hidden=${parseBoolean(step.options.hidden)}
+      ?readonly="${parseBoolean(step.options.readonly)}"
+      pattern="${step.options.pattern || _N}"      
+      maxlength="${step.options.maxlength || _N}"
+      minlength="${step.options.minlength || _N}"
+      autocapitalize="${step.options.autocapitalize || _N}"
+      accesskey="${step.options.accesskey || _N}"
+      lang="${step.options.lang || _N}"
+      role="${step.options.role || _N}"
+      slot="${step.options.slot || _N}"
+      spellcheck="${step.options.spellcheck || _N}"
+      style="${step.options.style || _N}"
+      tabindex="${step.options.tabindex || _N}"
+      title="${step.options.title || _N}"
+      translate="${step.options.translate || _N}"
+    >
+${step.value || ""}</textarea
+    >`;
+
 };
 
 const selectOne = (step) => {

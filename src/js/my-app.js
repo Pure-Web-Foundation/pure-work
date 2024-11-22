@@ -18,6 +18,7 @@ const UI = {
   },
   locationWhy: {
     ...baseUI.longtext,
+    class:"c-why",
     store: "locationWhy"
   },
   actor: {
