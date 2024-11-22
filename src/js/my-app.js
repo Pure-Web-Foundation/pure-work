@@ -208,7 +208,7 @@ customElements.define(
       );
 
       options.useBroker = true; // use Broker (pub-sub singleton message bus)
-
+      options.strings.continue = "Next";
       return options;
     }
 

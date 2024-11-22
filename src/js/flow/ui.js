@@ -189,7 +189,7 @@ class Form {
         ${this.renderBackButton()}
 
         <button name="continue" title="Continue" class="primary" type="submit">
-          Continue
+          ${this.step.flow.options.strings?.continue ?? 'Continue'}
           <span class="arrow">↲</span>
         </button>
       </fieldset>
@@ -208,7 +208,7 @@ class Form {
       class="secondary"
       tabindex="-1"
     >
-      Back
+      ${this.step.flow.options.strings?.back ?? 'Back'}
       <span class="arrow">↺</span>
     </button>`;
   }
@@ -282,7 +282,7 @@ class Form {
 
   calculateTime(step) {
     const wordCount = step.topic.split(" ").length;
-    if((typeof step.options.autoContinue) === "number")
+    if (typeof step.options.autoContinue === "number")
       return step.options.autoContinue;
 
     return 2000 + wordCount * 150;
@@ -290,17 +290,6 @@ class Form {
 }
 
 const input = (step) => {
-  // return html`<input
-  //   id="${step.id}"
-  //   required
-  //   spellcheck="false"
-  //   pattern="${step.options.pattern ?? nothing}"
-  //   name="step"
-  //   value="${step.value ?? ""}"
-  //   placeholder=${step.options.placeholder}
-  //   type="${step.options.type}"
-  // />`;
-
   const _N = nothing;
 
   return html`<input
@@ -334,46 +323,33 @@ const input = (step) => {
   />`;
 };
 
-
 const longText = (step) => {
-//   return html`<textarea
-//     id="${step.id}"
-//     required
-//     spellcheck="false"
-//     name="step"
-//     rows="${step.options.rows ?? 6}"
-//     placeholder=${step.options.placeholder}
-//   >
-// ${step.value ?? ""}</textarea
-//   >`;
-
-const _N = nothing;
-    return html`<textarea
-      id="${step.id || _N}"
-      autocomplete="${step.options.autocomplete ?? "off"}"      
-      name="step"
-      class="${step.options.class || _N}"
-      placeholder="${step.options.placeholder}"
-      ?required=${parseBoolean(step.options.required ?? true)}
-      ?hidden=${parseBoolean(step.options.hidden)}
-      ?readonly="${parseBoolean(step.options.readonly)}"
-      pattern="${step.options.pattern || _N}"      
-      maxlength="${step.options.maxlength || _N}"
-      minlength="${step.options.minlength || _N}"
-      autocapitalize="${step.options.autocapitalize || _N}"
-      accesskey="${step.options.accesskey || _N}"
-      lang="${step.options.lang || _N}"
-      role="${step.options.role || _N}"
-      slot="${step.options.slot || _N}"
-      spellcheck="${step.options.spellcheck || _N}"
-      style="${step.options.style || _N}"
-      tabindex="${step.options.tabindex || _N}"
-      title="${step.options.title || _N}"
-      translate="${step.options.translate || _N}"
-    >
+  const _N = nothing;
+  return html`<textarea
+    id="${step.id || _N}"
+    autocomplete="${step.options.autocomplete ?? "off"}"
+    name="step"
+    class="${step.options.class || _N}"
+    placeholder="${step.options.placeholder}"
+    ?required=${parseBoolean(step.options.required ?? true)}
+    ?hidden=${parseBoolean(step.options.hidden)}
+    ?readonly="${parseBoolean(step.options.readonly)}"
+    pattern="${step.options.pattern || _N}"
+    maxlength="${step.options.maxlength || _N}"
+    minlength="${step.options.minlength || _N}"
+    autocapitalize="${step.options.autocapitalize || _N}"
+    accesskey="${step.options.accesskey || _N}"
+    lang="${step.options.lang || _N}"
+    role="${step.options.role || _N}"
+    slot="${step.options.slot || _N}"
+    spellcheck="${step.options.spellcheck || _N}"
+    style="${step.options.style || _N}"
+    tabindex="${step.options.tabindex || _N}"
+    title="${step.options.title || _N}"
+    translate="${step.options.translate || _N}"
+  >
 ${step.value || ""}</textarea
-    >`;
-
+  >`;
 };
 
 const selectOne = (step) => {

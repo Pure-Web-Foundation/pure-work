@@ -2,6 +2,7 @@ export class FlowOptions {
   #id;
   #run;
   #initFn;
+  #strings = {};
 
   /**
    * Creates a new instance of FlowOptions.
@@ -37,6 +38,10 @@ export class FlowOptions {
    * Set to true to use Broker 
    */
   useBroker = false;
+
+  get strings (){
+    return this.#strings;
+  }
 
   /**
    * The time to pause before resolving a step and continuing with the next one.
