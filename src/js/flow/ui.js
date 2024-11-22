@@ -305,7 +305,7 @@ const input = (step) => {
 
   return html`<input
     id="${step.id || _N}"
-    autocomplete="${step.options.autocomplete ? "on" : "off"}"
+    autocomplete="${step.options.autocomplete ?? "off"}"
     name="step"
     type="${step.options.type || _N}"
     value="${step.value || _N}"
@@ -350,7 +350,7 @@ const longText = (step) => {
 const _N = nothing;
     return html`<textarea
       id="${step.id || _N}"
-      autocomplete="${step.options.autocomplete ? "on" : "off"}"      
+      autocomplete="${step.options.autocomplete ?? "off"}"      
       name="step"
       class="${step.options.class || _N}"
       placeholder="${step.options.placeholder}"
