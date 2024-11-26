@@ -3,6 +3,7 @@ import { LitElement, html, nothing } from "lit";
 import { FlowStepState } from "./index";
 import { Flow } from "./index";
 import { repeat } from "lit/directives/repeat.js";
+import { keyed } from "lit/directives/keyed.js";
 import "./ui-step";
 const htmlElm = document.documentElement;
 
@@ -78,14 +79,16 @@ export class FlowUI extends EventTargetMixin(LitElement) {
 
   renderFlow() {
     return html`
-      ${repeat(this.#flow.steps, (step, index) => {
-        return html`<flow-ui-step
+      ${keyed(this.#flow.steps, html`
+        ${repeat(this.#flow.steps, (step, index) => {
+          return html`<flow-ui-step
           .step="${step}"
           .isActive=${step === this.#flow.currentStep}
           .index="${index}"
         >
         </flow-ui-step>`;
-      })}
+        })}
+      `)}
     `;
   }
 

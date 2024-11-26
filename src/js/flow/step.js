@@ -31,8 +31,10 @@ export class FlowStep extends EventTargetMixin(EventTarget) {
    *
    * @param {Flow} flow
    * @param {*} topic
-   * @param {FlowStepOptions} options
-   * @param {*} fn
+   * @param {object} options
+   * @param {boolean} options.backTarget
+   * @param {*} options.topic
+   * @param {Function} fn
    */
   constructor(flow, topic, options, fn) {
     super();
