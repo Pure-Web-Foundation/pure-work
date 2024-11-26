@@ -3,13 +3,14 @@ import { FlowOptions } from "./flow/options";
 import { repeat } from "lit/directives/repeat.js";
 import { UI as baseUI } from "./flow/ui";
 import { Broker } from "./broker/index";
+import { ApiRequest } from "./api/index";
 
 const UI = {
   ...baseUI,
   lover: {
     ...baseUI.selectOne,
     items: ["Not at all", "A bit", "Sure", "Love them!"],
-    store: "lover"
+    store: "lover",
   },
   location: {
     ...baseUI.selectOne,
@@ -18,8 +19,25 @@ const UI = {
   },
   locationWhy: {
     ...baseUI.longtext,
-    class:"c-why",
-    store: "locationWhy"
+    class: "c-why",
+    store: "locationWhy",
+  },
+  movieDetail: {
+    ...baseUI.longtext,
+    class: "c-m-details",
+    store: "movieDetails",
+    label: "",
+
+    renderInput: (step) => {
+      const movie = step.topic;
+      return html` <div>
+        <p>
+          ${movie.director.name}'s <b>${movie.title}</b> (${movie.year}), with
+          ${movie.starring.join(", ")}, has a score of
+          <em>${movie.vote_average}</em>!
+        </p>
+      </div>`;
+    },
   },
   actor: {
     ...baseUI.text,
@@ -127,7 +145,7 @@ customElements.define(
         lover: "Love them!",
         location: "In a theater",
         actor: "Jodie Foster",
-        favorite: "One Flew Over the Cuckoo's Nest",
+        favorite: "One Flew",
         genres: ["Filmhouse", "Drama"],
         theater: "Once every couple of months",
         streaming: ["Amazon Prime", "Netflix", "HBO Max"],
@@ -194,6 +212,10 @@ customElements.define(
         (flow) => {
           this.flow = flow;
 
+          flow.install("lookup", this.lookupAction.bind(this), {
+            backTarget: false // skip this step when going back.
+          });
+
           // custom action
           this.flow.install("text", this.text.bind(this));
 
@@ -232,11 +254,18 @@ customElements.define(
       });
       const results = {};
 
-      (results.movieLover = await wf.ask("Are you a movie lover?", UI.lover)),
-        (results.best = await wf.ask(
-          "What is your favorite movie of all time?",
-          UI.favorite
-        ));
+      results.movieLover = await wf.ask("Are you a movie lover?", UI.lover);
+
+      results.best = await wf.ask(
+        "What is your favorite movie of all time?",
+        UI.favorite
+      );
+
+      results.movieDetails = await wf.lookup(results.best);
+
+      if (results.movieDetails)
+        await wf.ui(results.movieDetails, UI.movieDetail);
+      else await wf.ui("No movies found", { type: "hidden" });
 
       results.genres = await wf.ask(
         "What are your favorite movie genres?",
@@ -296,6 +325,58 @@ customElements.define(
       await wf.text("Results coming up....");
 
       await wf.show(results, UI.results);
+    }
+
+    async lookupAction(step) {
+      const request = {
+        headers: {
+          accept: "application/json",
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMDY5Zjc5MjZmZDI0Y2NkNmI0YmVhODJjMjRhOTE3YSIsInN1YiI6IjY1YTEwNGE0ZjA0ZDAxMDEyMjc5MTI0MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.YeIAk8TWtLgEVUcl24e_FZ4owWJqiFzzZlwi5KAhkxM",
+        },
+      };
+      const api = ApiRequest.factory({
+        baseUrl: "https://api.themoviedb.org/3/",
+      });
+
+      const params = new URLSearchParams();
+      params.append("query", step.topic);
+
+      const result = await api.getData(`search/movie?${params.toString()}`, {
+        ...request,
+      });
+
+      const id = result.results[0]?.id;
+
+      if (!id) {
+        step.resolve(null);
+      } else {
+        const movie = await api.getData(
+          `movie/${id}?append_to_response=credits`,
+          {
+            ...request,
+          }
+        );
+
+        movie.year = new Date(movie.release_date).getFullYear();
+
+        movie.director =
+          movie.credits.crew.find(
+            (x) => x.known_for_department === "Directing"
+          ) ?? "Unknown director";
+        movie.starring = movie.credits.cast
+          .filter((x) => x.known_for_department === "Acting")
+          .slice(0, 3)
+          .map((x) => x.name);
+
+        movie.toString = function () {
+          return `${this.title} (${this.director.name}, ${
+            movie.year
+          } - with ${this.starring.join(", ")})`;
+        };
+
+        step.resolve(movie);
+      }
     }
   }
 );

@@ -74,6 +74,7 @@ button {
     &.secondary {
         border: 2px solid #34a6b8;
         background-color: transparent;
+        color: var(--color-label);
     }
 }
 
@@ -130,4 +131,10 @@ dl.key-value {
 
 .c-why {
     color: var(--color-accent); /* custom class in flow */
+}
+
+flow-ui-step {
+    article {
+        margin: 0;
+    }
 }

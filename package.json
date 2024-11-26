@@ -7,7 +7,8 @@
   "exports": {
     "./flow": "./src/js/flow/index.js",
     "./flow/ui": "./src/js/flow/ui.js",
-    "./broker": "./src/js/broker/index.js"
+    "./broker": "./src/js/broker/index.js",
+    "./api": "./src/js/api/index.js"
   },
   "scripts": {
     "dev": "node esbuild-dev.js",

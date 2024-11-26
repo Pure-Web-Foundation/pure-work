@@ -49,8 +49,8 @@ export class FlowUI extends EventTargetMixin(LitElement) {
 
           if (stepElement) {
             scrollIntoView(stepElement).then(() => {
-              stepElement.querySelector("[name]")?.focus();
-
+              stepElement.querySelector(":not(button)[name]")?.focus();
+              
               // remove completed steps unless 'step-ui-rendered' event is prevented.
               const renderedEvent = wf.fire("step-ui-rendered", {
                 step: step,
@@ -110,10 +110,6 @@ export class FlowUI extends EventTargetMixin(LitElement) {
     wf.on("step-started", () => {
       this.requestUpdate();
     })
-      // .on("flow-ended", (e) => {
-      //   const step = e.detail.step;
-      //   step.render = () => html`${step.topic ?? ""}`;
-      // })
       .on("enter-detected", () => {
         const form = this.querySelector(
           "[data-flow-inner] .flow-step:not(.completed) form"
