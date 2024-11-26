@@ -32,7 +32,6 @@ customElements.define(
       this.setStepClasses(step, isLast);
 
       try {
-
         return step.render();
       } finally {
         if (isLast) {
