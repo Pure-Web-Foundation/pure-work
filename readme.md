@@ -26,6 +26,7 @@ Every step in the workflow represents a piece of work that can have a UI represe
 2. Customizability (the only requirement is for each step to be an async method)
 3. Extensibility (hook into the event model, and extend each step with custom UI)
 4. 100% separation of workflow running (`Flow`) and UI handling (`<flow-ui>` web component).
+5. Imperative, as well as Dynamic/Declarative flows (using the `DynamicFlow` class)
 
 ### 1.2 Basic Usage (`flow-ui` Web Component)
 
@@ -63,7 +64,38 @@ It wraps the `Flow` class and provides a UI for running flows.
 
 See [the demo page](https://pwfworkflow.z6.web.core.windows.net/) for a live demo.
 
-### 1.4 Advanced Usage (`Flow` class)
+
+### 1.4 Dynamic Flows
+
+While you will often create flows imperatively, you may also want to create flows from declarative data (JSON, dynamic imports, etc.).
+
+These are the first two questions shown on the [demo page](https://pwfworkflow.z6.web.core.windows.net/), turned into a declarative format:
+
+```js
+  const result = await new DynamicFlow([
+  {
+    id: "movieLover",
+    topic: "Are you a movie lover?",
+    options: "lover",
+  },
+  {
+    id: "best",
+    topic: "And what's your favorite movie?",
+    options: "favorite",
+  }]).run(wf, UI) 
+
+  /* result will look like this:
+    {
+      movieLover: ...,
+      best:...,
+    }
+  */
+
+
+```
+
+
+### 1.5 Advanced Usage (`Flow` class)
 
 Where `flow-ui` is a UI wrapper around the `Flow` class, the `Flow` class is UI-independent, and can be used to build everywhere.
 

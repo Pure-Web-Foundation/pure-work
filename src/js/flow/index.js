@@ -70,7 +70,11 @@ export class Flow extends EventTargetMixin(EventTarget) {
   #setupHooks() {
     this._keydown = (e) => {
       if (e.key === "Enter") {
-        if (["TEXTAREA"].includes(e.target?.nodeName) || e.target.closest("[data-prevent-enter]")) return;
+        if (
+          ["TEXTAREA"].includes(e.target?.nodeName) ||
+          e.target.closest("[data-prevent-enter]")
+        )
+          return;
 
         this.fire("enter-detected");
       }
@@ -322,4 +326,44 @@ export class Flow extends EventTargetMixin(EventTarget) {
   }
 }
 
-export { FlowOptions, FlowStep, FlowState, FlowStepState };
+class DynamicFlow {
+  #start;
+
+  /**
+   * Convert a declarative flow into a Flow start function.
+   * @param {Array} array with flow steps, each with id, topic, options properties.
+   * @returns {Function } async function with signature 'async methodName(flow, UI){}'
+   */
+  constructor(ar) {
+    const body = [/*js*/ `const results = {};`];
+
+    const quote = (v) => {
+      return typeof v === "string" ? `"${v}"` : v;
+    };
+
+    for (const stepItem of ar) {
+      body.push(
+        /*js*/ `results.${stepItem.id} = await wf.${
+          stepItem.method ?? "ask"
+        }(${quote(stepItem.topic)}, UI.${stepItem.options});`
+      );
+    }
+
+    const script = body.join(";");
+
+    this.#start = new Function(
+      "wf,UI",
+      /*js*/ `return (async (wf,UI) => { 
+      ${script} 
+      return results;
+    })(wf,UI);
+    `
+    );
+  }
+
+  get run() {
+    return this.#start;
+  }
+}
+
+export { FlowOptions, FlowStep, FlowState, FlowStepState, DynamicFlow };
