@@ -31,6 +31,12 @@
     /* utility */
 
     flow-ui-step {
+
+
+        button.is-hidden{
+            visibility: hidden;
+        }
+
         &.skipped {
             display: none !important;
         }

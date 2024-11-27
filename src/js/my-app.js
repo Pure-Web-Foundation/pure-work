@@ -249,9 +249,9 @@ customElements.define(
 
     // entrypoint (first step) of the workflow
     async movieSurvey(wf) {
-      await wf.text("Welcome to the movie survey!", {
-        backTarget: false,
-      });
+      // await wf.text("Welcome to the movie survey!", {
+      //   backTarget: false,
+      // });
       const results = {};
 
       results.movieLover = await wf.ask("Are you a movie lover?", UI.lover);

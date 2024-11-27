@@ -198,13 +198,14 @@ class Form {
   }
 
   renderBackButton() {
-    if (this.step.index === 0) return nothing;
+    
     return html`<button
       @click=${this.backClick}
       name="back"
       title="Back"
       type="button"
-      class="secondary"
+      
+      class="secondary ${this.step.index === 0 ? 'is-hidden': ''}"
       tabindex="-1"
     >
       ${this.step.flow.options.strings?.back ?? 'Back'}
