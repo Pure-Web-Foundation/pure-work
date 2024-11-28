@@ -51,7 +51,7 @@ export class FlowUI extends EventTargetMixin(LitElement) {
           if (stepElement) {
             scrollIntoView(stepElement).then(() => {
               stepElement.querySelector(":not(button)[name]")?.focus();
-              
+
               // remove completed steps unless 'step-ui-rendered' event is prevented.
               const renderedEvent = wf.fire("step-ui-rendered", {
                 step: step,
@@ -79,16 +79,19 @@ export class FlowUI extends EventTargetMixin(LitElement) {
 
   renderFlow() {
     return html`
-      ${keyed(this.#flow.steps, html`
-        ${repeat(this.#flow.steps, (step, index) => {
-          return html`<flow-ui-step
-          .step="${step}"
-          .isActive=${step === this.#flow.currentStep}
-          .index="${index}"
-        >
-        </flow-ui-step>`;
-        })}
-      `)}
+      ${keyed(
+        this.#flow.steps,
+        html`
+          ${repeat(this.#flow.steps, (step, index) => {
+            return html`<flow-ui-step
+              .step="${step}"
+              .isActive=${step === this.#flow.currentStep}
+              .index="${index}"
+            >
+            </flow-ui-step>`;
+          })}
+        `
+      )}
     `;
   }
 
@@ -112,14 +115,13 @@ export class FlowUI extends EventTargetMixin(LitElement) {
 
     wf.on("step-started", () => {
       this.requestUpdate();
-    })
-      .on("enter-detected", () => {
-        const form = this.querySelector(
-          "[data-flow-inner] .flow-step:not(.completed) form"
-        );
-        if (form) form.requestSubmit(form.querySelector("[name='continue']"));
-        else wf.requestResolve();
-      });
+    }).on("enter-detected", () => {
+      const form = this.querySelector(
+        "[data-flow-inner] .flow-step:not(.completed) form"
+      );
+      if (form) form.requestSubmit(form.querySelector("[name='continue']"));
+      else wf.requestResolve();
+    });
 
     this.#flow = wf;
     return wf;
@@ -162,8 +164,14 @@ class Form {
 
   renderControl() {
     return html`
-      <fieldset class="control" data-control-type="${this.step.options.type}">
-        <legend>${this.step.options.title ?? ""}</legend>
+      <fieldset
+        class="control"
+        data-control-type="${this.step.options.type}"
+        aria-labelledby="h${this.step.id}"
+      >
+        <div id="h${this.step.id}" class="legend">
+          ${this.step.options.title ?? ""}
+        </div>
         ${this.renderInput()}
       </fieldset>
     `;
@@ -188,7 +196,7 @@ class Form {
         ${this.renderBackButton()}
 
         <button name="continue" title="Continue" class="primary" type="submit">
-          ${this.step.flow.options.strings?.continue ?? 'Continue'}
+          ${this.step.flow.options.strings?.continue ?? "Continue"}
           <span class="arrow">↲</span>
         </button>
       </fieldset>
@@ -198,17 +206,15 @@ class Form {
   }
 
   renderBackButton() {
-    
     return html`<button
       @click=${this.backClick}
       name="back"
       title="Back"
       type="button"
-      
-      class="secondary ${this.step.index === 0 ? 'is-hidden': ''}"
+      class="secondary ${this.step.index === 0 ? "is-hidden" : ""}"
       tabindex="-1"
     >
-      ${this.step.flow.options.strings?.back ?? 'Back'}
+      ${this.step.flow.options.strings?.back ?? "Back"}
       <span class="arrow">↺</span>
     </button>`;
   }
@@ -339,6 +345,8 @@ const longText = (step) => {
     minlength="${step.options.minlength || _N}"
     autocapitalize="${step.options.autocapitalize || _N}"
     accesskey="${step.options.accesskey || _N}"
+    rows="${step.options.rows || _N}"
+    cols="${step.options.cols || _N}"
     lang="${step.options.lang || _N}"
     role="${step.options.role || _N}"
     slot="${step.options.slot || _N}"
