@@ -35,6 +35,7 @@ export function EventTargetMixin(superclass) {
     fire(eventName, detail = {}) {
       const ev = new CustomEvent(eventName, {
         detail: detail || {},
+        cancelable: true
       });
       this.dispatchEvent(ev);
       return ev;

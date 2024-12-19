@@ -140,6 +140,19 @@ customElements.define(
   class MyApp extends LitElement {
     constructor() {
       super();
+      const me = this;
+      // window.navigation.addEventListener("navigate", (e) => {
+      //   e.intercept({
+      //     async handler() {
+      //       if (new URL(e.destination.url).pathname === "/run") {
+      //         me.start();
+      //       } else {
+      //         me.stop();
+      //       }
+      //       return;
+      //     },
+      //   });
+      // });
 
       const movie = {
         lover: "Love them!",
@@ -165,9 +178,9 @@ customElements.define(
           } else console.log(`No changes in ${data.key}`);
         });
 
-      setTimeout(() => {
-        this.start();
-      }, 1);
+      // setTimeout(() => {
+      //   this.start();
+      // }, 1);
     }
 
     createRenderRoot() {
@@ -181,6 +194,11 @@ customElements.define(
     render() {
       if (!this.load) {
         return html` <h1>Movie survey</h1>
+
+          <!--  
+        <p><a href="/run">Run worflow!</a></p>
+        -->
+
           <p>
             An example of running a workflow with the
             <a
@@ -204,6 +222,10 @@ customElements.define(
       this.load = this.movieSurveyFlow;
     }
 
+    stop() {
+      this.load = null;
+    }
+
     // returns options for a workflow
     get movieSurveyFlow() {
       const options = new FlowOptions(
@@ -213,7 +235,7 @@ customElements.define(
           this.flow = flow;
 
           flow.install("lookup", this.lookupAction.bind(this), {
-            backTarget: false // skip this step when going back.
+            backTarget: false, // skip this step when going back.
           });
 
           // custom action
@@ -226,6 +248,8 @@ customElements.define(
           flow.on("step-ui-rendered", (e) => {
             // work with rendered ui
           });
+
+
         }
       );
 
