@@ -12,8 +12,8 @@ const UI = {
     placeholder: "Type a message...",
     stepClass: "actor-user",
     on: {
-      input: e=>{
-        e.target.parentNode.dataset.replicatedValue = e.target.value
+      input: (e) => {
+        e.target.parentNode.dataset.replicatedValue = e.target.value;
       },
       keydown: (e) => {
         if (e.key === "Enter")
@@ -88,8 +88,19 @@ customElements.define(
     }
 
     reply(step) {
-      step.render = () => html`${step.topic}`;
-      step.resolve();
+      const question = step.topic;
+
+      const answer = `You asked "${question}"`;
+
+      const answerHtml = html`
+        <div>
+          <div>${answer}</div>
+          ${this.renderTime(new Date())}
+        </div>
+      `;
+
+      step.render = () => html`${answerHtml}`;
+      step.resolve(answer);
     }
 
     thinking(step) {
@@ -114,13 +125,7 @@ customElements.define(
 
         await wf.thinking();
 
-        const answer = html`
-          <div>
-            <div>You asked "${question}"</div>
-            ${this.renderTime(new Date())}
-          </div>
-        `;
-        await wf.reply(answer);
+        const answer = await wf.reply(question);
 
         thread.push({
           ai: answer,

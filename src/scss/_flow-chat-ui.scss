@@ -40,7 +40,6 @@ flow-ui[type="chat"] {
                 display: flex;
                 align-self: flex-end;
                 flex-direction: row;
-                justify-content: end;
 
                 &:not(.running) {
                     [name="step"] {
