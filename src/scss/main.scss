@@ -165,7 +165,7 @@ chat-flow {
     right: 0;
     bottom: 0;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
 
     flow-ui[type="chat"] [data-flow-inner] flow-ui-step {
         margin-left: 1rem;
@@ -188,7 +188,7 @@ chat-flow {
 flow-ui#thread {
     display: flex;
     flex-direction: column-reverse;
-    height: 100lvh;
+    height: 100dvh;
 
     [data-flow-inner] {
         &::-webkit-scrollbar {
