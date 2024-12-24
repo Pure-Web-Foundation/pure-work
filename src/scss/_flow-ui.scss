@@ -1,6 +1,6 @@
 /* general flow */
 
-[data-flow-ui-type] {
+flow-ui {
     [data-flow-inner] {
         &.busy {
             &::after {
@@ -31,9 +31,7 @@
     /* utility */
 
     flow-ui-step {
-
-
-        button.is-hidden{
+        button.is-hidden {
             visibility: hidden;
         }
 
@@ -129,8 +127,8 @@
                     margin-top: 1rem;
                     margin-bottom: 1rem;
 
-                    &:empty{
-                        display: none;;
+                    &:empty {
+                        display: none;
                     }
                 }
             }
@@ -157,7 +155,6 @@
 
                 &:focus-within {
                     span {
-                        color: var(--color-accent);
                         font-weight: 600;
                     }
                     input {

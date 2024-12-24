@@ -1,6 +1,12 @@
 :root {
-    --color-accent: #34a6b8;
+    --color-accent: #a22f4d;
     --rad-default: 1rem;
     --rad-small: .5rem;
     --pad-default: 1rem 2rem;
+}
+
+@media (prefers-color-scheme: light) {
+    :root{
+        --color-accent: #dd446d;
+    }
 }

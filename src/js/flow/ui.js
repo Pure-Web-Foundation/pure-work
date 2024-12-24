@@ -27,7 +27,7 @@ export class FlowUI extends EventTargetMixin(LitElement) {
 
   updated(changedProperties) {
     if (changedProperties.has("type")) {
-      htmlElm.setAttribute("data-flow-ui-type", this.type);
+      if (this.isFullPage) htmlElm.setAttribute("data-flow-ui-type", this.type);
     }
 
     if (changedProperties.has("options")) {
@@ -41,7 +41,7 @@ export class FlowUI extends EventTargetMixin(LitElement) {
         this.currentStep = null;
       })
         .on("flow-started", () => {
-          htmlElm.setAttribute("data-flow", wf.options.id);
+          if (this.isFullPage) htmlElm.setAttribute("data-flow", wf.options.id);
         })
         .on("step-rendered", (e) => {
           const step = e.detail;
@@ -57,7 +57,7 @@ export class FlowUI extends EventTargetMixin(LitElement) {
                 step: step,
                 element: stepElement,
               });
-              if (!renderedEvent.defaultPrevented) {
+              if (this.isFullPage && !renderedEvent.defaultPrevented) {
                 this.querySelectorAll("flow-ui-step.completed").forEach((u) => {
                   u.remove();
                 });
@@ -68,6 +68,10 @@ export class FlowUI extends EventTargetMixin(LitElement) {
 
       wf.start();
     }
+  }
+
+  get isFullPage() {
+    return this.type === "full-page";
   }
 
   render() {
@@ -107,7 +111,7 @@ export class FlowUI extends EventTargetMixin(LitElement) {
 
         return html`<span data-step-show>${step.topic}</span>`;
       };
-
+      
       setTimeout(() => {
         step.resolve();
       }, step.options.wait ?? 500);
@@ -250,6 +254,18 @@ class Form {
         step.resolve(step.value ?? 1);
       }, this.calculateTime(step));
     }
+
+    if (this.step.state === "completed") {
+      const event = this.step.flow.fire("step-completed-ui-render", {
+        step: this.step,
+      });
+      if (typeof event.detail.render === "function")
+        return event.detail.render(this.step);
+      else if (!event.defaultPrevented) {
+        return html`<span data-completed-step>${this.step.value || ""}</span>`;
+      }
+    }
+
     switch (step.options.type) {
       case "button":
         return html`<button @click=${() => step.resolve(1)}>
@@ -326,11 +342,16 @@ const input = (step) => {
     tabindex="${step.options.tabindex || _N}"
     title="${step.options.title || _N}"
     translate="${step.options.translate || _N}"
+    @input=${step.options.on?.input || _N}
+    @keydown=${step.options.on?.keydown || _N}
+    @keyup=${step.options.on?.keyup || _N}
+
   />`;
 };
 
 const longText = (step) => {
   const _N = nothing;
+
   return html`<textarea
     id="${step.id || _N}"
     autocomplete="${step.options.autocomplete ?? "off"}"
@@ -355,6 +376,9 @@ const longText = (step) => {
     tabindex="${step.options.tabindex || _N}"
     title="${step.options.title || _N}"
     translate="${step.options.translate || _N}"
+    @input=${step.options.on?.input || _N}
+    @keydown=${step.options.on?.keydown || _N}
+    @keyup=${step.options.on?.keyup || _N}
   >
 ${step.value || ""}</textarea
   >`;

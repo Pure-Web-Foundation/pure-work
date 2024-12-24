@@ -19,6 +19,10 @@ customElements.define(
       return this;
     }
 
+    get flow(){
+      return this.#flow;
+    }
+
     render() {
       if (!this.step) return nothing;
 
@@ -45,6 +49,9 @@ customElements.define(
 
     setStepClasses(step, isLast) {
       this.classList.add("flow-step");
+      if(step.options.stepClass){
+        this.classList.add(...step.options.stepClass.split(" "));
+      }
 
       if (isLast) this.classList.add("current-step");
 

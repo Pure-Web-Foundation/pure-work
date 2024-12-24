@@ -6,6 +6,24 @@ body {
     font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+main nav {
+    display: flex;
+    gap: 1rem;
+
+    > * {
+        padding: 0.5rem 1rem;
+        border-radius: 1rem;
+        border: 3px solid rgba(127, 127, 127, 0.5);
+    }
+
+    a:link,
+    a:visited,
+    a:active {
+        text-decoration: none;
+        color: inherit;
+    }
+}
+
 form,
 section {
     border-radius: var(--rad-default);
@@ -68,13 +86,14 @@ button {
     }
 
     &.primary {
-        background-color: #34a6b8;
+        background-color: var(--color-accent);
     }
 
     &.secondary {
-        border: 2px solid #34a6b8;
+        border: 2px solid var(--color-accent);
         background-color: transparent;
         color: var(--color-label);
+        box-shadow: none;
     }
 }
 
@@ -136,5 +155,82 @@ dl.key-value {
 flow-ui-step {
     article {
         margin: 0;
+    }
+}
+
+chat-flow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+
+    flow-ui[type="chat"] [data-flow-inner] flow-ui-step {
+        margin-left: 1rem;
+        margin-right: 1rem;
+
+        &.running:has(form) {
+            padding: 0;
+            margin: 0;
+            form {
+                padding: 0;
+            }
+        }
+    }
+
+    [data-flow-continue]{
+        display: contents;
+    }
+}
+
+flow-ui#thread {
+    display: flex;
+    flex-direction: column-reverse;
+    height: 100lvh;
+
+    [data-flow-inner] {
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    .chat-box {
+        min-height: unset;
+    }
+
+    form {
+        background-color: transparent;
+
+        [data-flow-continue] {
+            position: relative;
+
+            [name="back"] {
+                display: none;
+            }
+
+            textarea {
+                padding-right: 60px;
+            }
+
+            button {
+                position: absolute;
+                bottom: 40px;
+                right: 15px;
+                background-color: transparent;
+                color: inherit;
+                box-shadow: none;
+            }
+        }
+    }
+
+    time {
+        display: block;
+        width: 100%;
+        text-align: right;
+        margin-top: 1rem;
+        font-size: small;
+        opacity: 0.5;
     }
 }

@@ -1,0 +1,110 @@
+flow-ui[type="chat"] {
+    height: 100%;
+    position: relative;
+    [data-flow-inner] {
+        display: flex;
+        flex-direction: column;
+
+        gap: 1rem;
+        padding-bottom: 300px;
+        overflow-y: auto;
+
+        flow-ui-step {
+            padding: 0.4rem 1.2rem;
+            border-radius: 1rem;
+
+            &:not(.running) {
+                width: 60%;
+                max-width: 400px;
+            }
+
+            &.running {
+                form {
+                    width: 100%;
+
+                    [name] {
+                        width: inherit;
+                    }
+                }
+            }
+
+            &:not(.actor-user) {
+                background-color: rgba(111, 111, 111, 0.2);
+                display: flex;
+                flex-direction: row;
+                justify-content: start;
+            }
+
+            &.actor-user {
+                background-color: rgba(11, 255, 55, 0.2);
+                display: flex;
+                align-self: flex-end;
+                flex-direction: row;
+                justify-content: end;
+
+                &:not(.running) {
+                    [name="step"] {
+                        text-align: right;
+                    }
+                }
+            }
+
+            &.completed:has(form) {
+                form,
+                fieldset,
+                label,
+                [name="step"] {
+                    border: none;
+                    background: none;
+                    outline: none;
+                    cursor: default;
+                    color: inherit;
+                    font: inherit;
+                    padding: 0;
+                    pointer-events: none;
+                    width: auto;
+                    height: auto;
+                }
+
+                label,
+                [data-flow-continue] {
+                    display: none;
+                }
+            }
+
+            &.hide-when-completed {
+                display: inline-block;
+                font-weight: 800;
+                font-size: large;
+                background: linear-gradient(
+                    rgba(255, 255, 255, 1),
+                    rgba(0, 0, 0, 0)
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+            > div {
+                width: 100%;
+            }
+
+            &.completed {
+                &.hide-when-completed {
+                    display: none;
+                    opacity: 0;
+                    zoom: 0;
+                    transition: all 0.5s ease-out;
+                }
+            }
+
+            &.running:has(form) {
+                background-color: transparent;
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                left: 0px;
+                width: 100vw
+            }
+        }
+    }
+}

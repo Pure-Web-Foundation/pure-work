@@ -133,26 +133,19 @@ const UI = {
       `;
     },
   },
+  chatBox: {
+    ...baseUI.longtext,
+    class: "chat-box",
+    stepClass: "actor-user",
+  },
 };
 
 customElements.define(
-  "my-app",
-  class MyApp extends LitElement {
+  "movies-flow",
+  class MoviesFlow extends LitElement {
     constructor() {
       super();
       const me = this;
-      // window.navigation.addEventListener("navigate", (e) => {
-      //   e.intercept({
-      //     async handler() {
-      //       if (new URL(e.destination.url).pathname === "/run") {
-      //         me.start();
-      //       } else {
-      //         me.stop();
-      //       }
-      //       return;
-      //     },
-      //   });
-      // });
 
       const movie = {
         lover: "Love them!",
@@ -177,57 +170,24 @@ customElements.define(
             movie[data.key] = data.value;
           } else console.log(`No changes in ${data.key}`);
         });
-
-      // setTimeout(() => {
-      //   this.start();
-      // }, 1);
     }
 
     createRenderRoot() {
       return this;
     }
 
-    static properties = {
-      load: { type: Object },
-    };
-
     render() {
-      if (!this.load) {
-        return html` <h1>Movie survey</h1>
-
-          <!--  
-        <p><a href="/run">Run worflow!</a></p>
-        -->
-
-          <p>
-            An example of running a workflow with the
-            <a
-              target="_blank"
-              href="https://www.npmjs.com/package/@pwf/pure-work"
-              >pure-work/flow</a
-            >
-            flow runner.
-          </p>
-          <button @click=${this.start}>Start survey</button>`;
-      }
-
-      if (this.load)
-        return html`
-          <flow-ui type="full-page" .options=${this.load}></flow-ui>
-        `;
-    }
-
-    // starts the workflow
-    start() {
-      this.load = this.movieSurveyFlow;
-    }
-
-    stop() {
-      this.load = null;
+      return html`
+        <flow-ui
+          id="${this.options.id}"
+          type="${this.options.flowType ?? "full-page"}"
+          .options=${this.options}
+        ></flow-ui>
+      `;
     }
 
     // returns options for a workflow
-    get movieSurveyFlow() {
+    get options() {
       const options = new FlowOptions(
         "movieSurvey",
         this.movieSurvey.bind(this),
@@ -248,8 +208,6 @@ customElements.define(
           flow.on("step-ui-rendered", (e) => {
             // work with rendered ui
           });
-
-
         }
       );
 
