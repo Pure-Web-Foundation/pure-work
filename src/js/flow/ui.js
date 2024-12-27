@@ -231,7 +231,7 @@ class Form {
     if (this.step.options.footnotes)
       return html`<section class="footnotes">
         ${repeat(Object.entries(this.step.options.footnotes), ([id, note]) => {
-          return html`<dl><dt>${id}</dt><dd>${note}</dd></dl></p>`;
+          return html`<dl><dt>${id}</dt><dd>${note}</dd></dl>`;
         })}
       </section>`;
   }
