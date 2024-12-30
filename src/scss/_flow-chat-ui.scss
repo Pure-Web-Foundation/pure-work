@@ -12,11 +12,8 @@ flow-ui[type="chat"] {
         flow-ui-step {
             padding: 0.4rem 1.2rem;
             border-radius: 1rem;
-
-            &:not(.running) {
-                width: 60%;
-                max-width: 400px;
-            }
+            max-width: 800px;
+            min-width: 100px;
 
             &.running {
                 form {
@@ -102,7 +99,18 @@ flow-ui[type="chat"] {
                 bottom: 0;
                 right: 0;
                 left: 0px;
-                width: 100vw
+                width: 100vw;
+                max-width: unset;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    flow-ui[type="chat"] {
+        [data-flow-inner] {
+            flow-ui-step {
+                max-width: 80vw;
             }
         }
     }

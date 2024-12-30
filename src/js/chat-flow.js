@@ -72,7 +72,7 @@ customElements.define(
           flow.on("step-completed-ui-render", (e) => {
             e.detail.render = (step) => {
               return html` <div data-completed-step>
-                <div>${step.value || ""}</div>
+                <div class="pre-wrap">${step.value || ""}</div>
                 ${this.renderTime(new Date(step.completedAt))}
               </div>`;
             };
@@ -94,7 +94,7 @@ customElements.define(
 
       const answerHtml = html`
         <div>
-          <div>${answer}</div>
+          <div class="pre-wrap">${answer}</div>
           ${this.renderTime(new Date())}
         </div>
       `;

@@ -1,6 +1,11 @@
 /* general flow */
 
 flow-ui {
+
+    .pre-wrap {
+        white-space: pre-wrap;
+    }
+
     [data-flow-inner] {
         &.busy {
             &::after {
