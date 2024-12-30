@@ -1,4 +1,5 @@
 import { EventTargetMixin } from "../common";
+import { html } from "lit";
 
 export const FlowStepState = Object.freeze({
   Unknown: "unknown",
@@ -23,7 +24,7 @@ export class FlowStep extends EventTargetMixin(EventTarget) {
   #key;
   #state = FlowStepState.Unknown;
   #resolve = () => {};
-  #render = () => {};
+  #render = () => html`<div class="step-waiting"><span>●</span><span>●</span><span>●</span></div>`;
   #rendered = () => {};
   __rerunValue;
 

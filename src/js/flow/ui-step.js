@@ -1,11 +1,10 @@
-import { nothing, LitElement } from "lit";
+import { html, nothing, LitElement } from "lit";
 import { EventTargetMixin } from "../common";
 import { FlowStepState } from "./step.js";
 
 customElements.define(
   "flow-ui-step",
   class FlowUIStep extends EventTargetMixin(LitElement) {
-
     #flow;
 
     static get properties() {
@@ -19,7 +18,7 @@ customElements.define(
       return this;
     }
 
-    get flow(){
+    get flow() {
       return this.#flow;
     }
 
@@ -49,7 +48,7 @@ customElements.define(
 
     setStepClasses(step, isLast) {
       this.classList.add("flow-step");
-      if(step.options.stepClass){
+      if (step.options.stepClass) {
         this.classList.add(...step.options.stepClass.split(" "));
       }
 

@@ -3,6 +3,15 @@ import { FlowOptions } from "./flow/options";
 import { repeat } from "lit/directives/repeat.js";
 import { UI as baseUI } from "./flow/ui";
 
+const wait = async (timeout)=> {
+  return new Promise(resolve=>{
+    setTimeout(() => {
+      resolve()
+    }, timeout);
+  })
+}
+
+
 const UI = {
   ...baseUI,
 
@@ -59,8 +68,6 @@ customElements.define(
           // custom action
           this.flow.install("reply", this.reply.bind(this));
 
-          this.flow.install("thinking", this.thinking.bind(this));
-
           flow.on("flow-ended", (e) => {
             this.load = null;
           });
@@ -87,16 +94,10 @@ customElements.define(
       return options;
     }
 
-    thinking(step) {
-      step.options.stepClass = "hide-when-not-last thinking";
+    async reply(step) {
 
-      step.render = (data) => {
-        return html`<span>●</span><span>●</span><span>●</span>`;
-      };
-      step.resolve();
-    }
+      await wait(1000)
 
-    reply(step) {
       const question = step.topic;
 
       const answer = `You asked "${question}"`;
@@ -119,9 +120,7 @@ customElements.define(
         const question = await wf.ask("", UI.chatBox);
         thread.push({
           me: question,
-        });
-
-        await wf.thinking();
+        });       
 
         const answer = await wf.reply(question);
 

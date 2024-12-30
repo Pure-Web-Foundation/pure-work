@@ -50,7 +50,7 @@ flow-ui[type="chat"] {
                     overflow: hidden;
                     display: inline-block;
                     height: 2rem;
-                    animation: step_disappear 0.5s ease-out forwards;
+                    animation: step-disappear 0.5s ease-out forwards;
                 }
             }
 
@@ -111,6 +111,27 @@ flow-ui[type="chat"] {
                 width: 100vw;
                 max-width: unset;
             }
+
+            &:has(.step-waiting) {
+                background-color: transparent !important;
+            }
+
+            .step-waiting {
+                position: relative;
+                > * {
+                    position: absolute;
+                    animation: step-waiting 1s infinite ease-in-out;
+
+                    &:nth-child(2) {
+                        left: 1rem;
+                        animation-delay: 0.3s;
+                    }
+                    &:nth-child(3) {
+                        left: 2rem;
+                        animation-delay: 0.6s;
+                    }
+                }
+            }
         }
     }
 }
@@ -125,9 +146,26 @@ flow-ui[type="chat"] {
     }
 }
 
-@keyframes step_disappear {
+@keyframes step-disappear {
     to {
         zoom: 0;
         opacity: 0;
+    }
+}
+
+@keyframes step-waiting {
+    0% {
+        font-size: 1.2rem;
+        opacity: .3;
+    }
+    50% {
+        font-size: 1.6rem;
+        transform: translateY(-1.1rem);
+        opacity: 1;
+    }
+    100% {
+        font-size: 1.1rem;
+        transform: translateY(-0.65rem);
+        opacity: .4;
     }
 }
