@@ -45,6 +45,15 @@ flow-ui[type="chat"] {
                 }
             }
 
+            &.hide-when-not-last {
+                &:not(:last-child) {
+                    overflow: hidden;
+                    display: inline-block;
+                    height: 2rem;
+                    animation: step_disappear 0.5s ease-out forwards;
+                }
+            }
+
             &.completed:has(form) {
                 form,
                 fieldset,
@@ -113,5 +122,12 @@ flow-ui[type="chat"] {
                 max-width: 80vw;
             }
         }
+    }
+}
+
+@keyframes step_disappear {
+    to {
+        zoom: 0;
+        opacity: 0;
     }
 }

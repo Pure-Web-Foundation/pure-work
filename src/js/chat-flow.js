@@ -1,4 +1,4 @@
-import { html, LitElement } from "lit";
+import { html, LitElement, nothing } from "lit";
 import { FlowOptions } from "./flow/options";
 import { repeat } from "lit/directives/repeat.js";
 import { UI as baseUI } from "./flow/ui";
@@ -87,6 +87,15 @@ customElements.define(
       return options;
     }
 
+    thinking(step) {
+      step.options.stepClass = "hide-when-not-last thinking";
+
+      step.render = (data) => {
+        return html`<span>●</span><span>●</span><span>●</span>`;
+      };
+      step.resolve();
+    }
+
     reply(step) {
       const question = step.topic;
 
@@ -101,17 +110,6 @@ customElements.define(
 
       step.render = () => html`${answerHtml}`;
       step.resolve(answer);
-    }
-
-    thinking(step) {
-      step.options.stepClass = "hide-when-completed";
-      step.render = () => {
-        return html`...`;
-      };
-
-      setTimeout(() => {
-        step.resolve();
-      }, 200);
     }
 
     async threadFlow(wf) {
