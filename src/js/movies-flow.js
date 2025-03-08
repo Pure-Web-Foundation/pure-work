@@ -164,11 +164,9 @@ customElements.define(
           data.value = movie[data.key];
         })
         .subscribe(`flow-step-save`, (data) => {
-          console.log(`${data.key}: ${data.value}`);
-
           if (data.isModified) {
             movie[data.key] = data.value;
-          } else console.log(`No changes in ${data.key}`);
+          } 
         });
     }
 
@@ -210,7 +208,7 @@ customElements.define(
           });
         }
       );
-
+      options.useNavigation = true;
       options.useBroker = true; // use Broker (pub-sub singleton message bus)
       options.strings.continue = "Next";
       return options;

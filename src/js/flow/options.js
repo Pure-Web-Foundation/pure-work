@@ -47,4 +47,6 @@ export class FlowOptions {
    * The time to pause before resolving a step and continuing with the next one.
    */
   resolveDelay = 200;
+
+  useNavigation = false
 }

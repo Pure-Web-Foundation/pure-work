@@ -1,4 +1,4 @@
-import { EventTargetMixin } from "../common";
+import { EventTargetMixin, generateHash } from "../common";
 import { html } from "lit";
 
 export const FlowStepState = Object.freeze({
@@ -10,6 +10,10 @@ export const FlowStepState = Object.freeze({
   Completed: "completed",
   Replayed: "replayed",
 });
+
+function generateName(step, fn) {
+  return generateHash(`${JSON.stringify(step.options)}-${fn.toString()}`);
+}
 
 export class FlowStep extends EventTargetMixin(EventTarget) {
   #options;
@@ -24,7 +28,10 @@ export class FlowStep extends EventTargetMixin(EventTarget) {
   #key;
   #state = FlowStepState.Unknown;
   #resolve = () => {};
-  #render = () => html`<div class="step-waiting"><span>●</span><span>●</span><span>●</span></div>`;
+  #render = () =>
+    html`<div class="step-waiting">
+      <span>●</span><span>●</span><span>●</span>
+    </div>`;
   #rendered = () => {};
   __rerunValue;
 
@@ -83,7 +90,7 @@ export class FlowStep extends EventTargetMixin(EventTarget) {
       this.#isGivenName = true;
       return this.#options.name;
     }
-    return fn.name.split(" ").pop();
+    return generateName(this, fn);
   }
 
   // internal method

@@ -5,6 +5,7 @@ import { Flow } from "./index";
 import { repeat } from "lit/directives/repeat.js";
 import { keyed } from "lit/directives/keyed.js";
 import "./ui-step";
+import { FlowNav } from "./flow-nav";
 const htmlElm = document.documentElement;
 
 /**
@@ -12,6 +13,7 @@ const htmlElm = document.documentElement;
  */
 export class FlowUI extends EventTargetMixin(LitElement) {
   #flow;
+  #flowNav;
 
   static get properties() {
     return {
@@ -26,6 +28,12 @@ export class FlowUI extends EventTargetMixin(LitElement) {
   }
 
   updated(changedProperties) {
+    if (changedProperties.has("currentStep")) {
+      if (this.#flowNav) {
+        this.#flowNav.registerStep(this.currentStep.index);
+      }
+    }
+
     if (changedProperties.has("type")) {
       if (this.isFullPage) htmlElm.setAttribute("data-flow-ui-type", this.type);
     }
@@ -45,8 +53,11 @@ export class FlowUI extends EventTargetMixin(LitElement) {
         })
         .on("step-rendered", (e) => {
           const step = e.detail;
-
           const stepElement = this.querySelector(`[data-step="${step.key}"]`);
+
+          if (this.#flowNav) {
+            this.#flowNav.registerStep(step.index);
+          }
 
           if (stepElement) {
             scrollIntoView(stepElement).then(() => {
@@ -111,7 +122,7 @@ export class FlowUI extends EventTargetMixin(LitElement) {
 
         return html`<span data-step-show>${step.topic}</span>`;
       };
-      
+
       setTimeout(() => {
         step.resolve();
       }, step.options.wait ?? 500);
@@ -126,6 +137,18 @@ export class FlowUI extends EventTargetMixin(LitElement) {
       if (form) form.requestSubmit(form.querySelector("[name='continue']"));
       else wf.requestResolve();
     });
+
+    if (wf.options.useNavigation) {
+      this.#flowNav = new FlowNav({
+        onStepChange: (stepId) => {
+          const index = Number(stepId);
+          const name = wf.steps[index]?.name;
+          if (name) {
+            wf.back(name);
+          }
+        },
+      });
+    }
 
     this.#flow = wf;
     return wf;
@@ -231,7 +254,10 @@ class Form {
     if (this.step.options.footnotes)
       return html`<section class="footnotes">
         ${repeat(Object.entries(this.step.options.footnotes), ([id, note]) => {
-          return html`<dl><dt>${id}</dt><dd>${note}</dd></dl>`;
+          return html`<dl>
+            <dt>${id}</dt>
+            <dd>${note}</dd>
+          </dl>`;
         })}
       </section>`;
   }
@@ -345,7 +371,6 @@ const input = (step) => {
     @input=${step.options.on?.input || _N}
     @keydown=${step.options.on?.keydown || _N}
     @keyup=${step.options.on?.keyup || _N}
-
   />`;
 };
 
