@@ -60,7 +60,7 @@ export class FlowUI extends EventTargetMixin(LitElement) {
           }
 
           if (stepElement) {
-            scrollIntoView(stepElement).then(() => {
+            scrollIntoView(stepElement, { passive: wf.options.autoScroll === false }).then(() => {
               stepElement.querySelector(":not(button)[name]")?.focus();
 
               // remove completed steps unless 'step-ui-rendered' event is prevented.

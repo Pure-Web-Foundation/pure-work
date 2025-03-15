@@ -39,6 +39,11 @@ export class FlowOptions {
    */
   useBroker = false;
 
+  /**
+   * If set to false, the UI will not automatically scroll to the current step.
+   */
+  autoScroll = true;
+
   get strings (){
     return this.#strings;
   }

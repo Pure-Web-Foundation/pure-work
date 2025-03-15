@@ -1,8 +1,9 @@
 /**
  * Animates an element into view async and returns when the enimation has completed
  * @param {HTMLElement} element
+ * @param {Object} options use passive: true to prevent actual scrolling but still wait for element to be in view
  */
-export async function scrollIntoView(element) {
+export async function scrollIntoView(element, options = {}) {
   return new Promise((resolve) => {
     const observer = new IntersectionObserver((entries, observer) => {
       entries.forEach((entry) => {
@@ -15,7 +16,8 @@ export async function scrollIntoView(element) {
       });
     });
     observer.observe(element);
-    element.scrollIntoView({ behavior: "smooth" });
+    if(!options?.passive)
+      element.scrollIntoView({ behavior: "smooth" });
   });
 }
 

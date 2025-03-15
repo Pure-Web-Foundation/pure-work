@@ -208,6 +208,7 @@ customElements.define(
           });
         }
       );
+      
       options.useNavigation = true;
       options.useBroker = true; // use Broker (pub-sub singleton message bus)
       options.strings.continue = "Next";
