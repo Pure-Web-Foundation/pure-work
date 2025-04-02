@@ -28,7 +28,10 @@ export class FlowUI extends EventTargetMixin(LitElement) {
   }
 
   updated(changedProperties) {
-    if (changedProperties.has("currentStep")) {
+    if (
+      changedProperties.has("currentStep") &&
+      !isNaN(this.currentStep?.index)
+    ) {
       if (this.#flowNav) {
         this.#flowNav.registerStep(this.currentStep.index);
       }
@@ -60,7 +63,9 @@ export class FlowUI extends EventTargetMixin(LitElement) {
           }
 
           if (stepElement) {
-            scrollIntoView(stepElement, { passive: wf.options.autoScroll === false }).then(() => {
+            scrollIntoView(stepElement, {
+              passive: wf.options.autoScroll === false,
+            }).then(() => {
               stepElement.querySelector(":not(button)[name]")?.focus();
 
               // remove completed steps unless 'step-ui-rendered' event is prevented.
