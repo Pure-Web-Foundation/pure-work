@@ -1,6 +1,6 @@
 {
   "name": "@pwf/pure-work",
-  "version": "1.0.38",
+  "version": "1.0.39",
   "description": "Pure Vanilla Web App work processing",
   "main": "./public/assets/js/index.js",
   "homepage": "https://pwfworkflow.z6.web.core.windows.net/",
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "pure-flow"
+    "url": "https://github.com/Pure-Web-Foundation/pure-work.git"
   },
   "keywords": [
     "workflow",
