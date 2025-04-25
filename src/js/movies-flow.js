@@ -301,7 +301,12 @@ customElements.define(
 
       results.reviewImportance = await wf.ask(
         "How important are movie reviews to you when deciding what to watch?",
-        UI.importance
+        {
+          ...UI.importance,
+          strings: {
+            continue: "Finish!",
+          }
+        }
       );
 
       await wf.text("Results coming up....");

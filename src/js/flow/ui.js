@@ -228,7 +228,7 @@ class Form {
         ${this.renderBackButton()}
 
         <button name="continue" title="Continue" class="primary" type="submit">
-          ${this.step.flow.options.strings?.continue ?? "Continue"}
+          ${this.step.options.strings?.continue ?? this.step.flow.options.strings?.continue ?? "Continue"}
           <span class="arrow">↲</span>
         </button>
       </fieldset>
