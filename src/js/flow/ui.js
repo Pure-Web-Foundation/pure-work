@@ -56,6 +56,15 @@ export class FlowUI extends EventTargetMixin(LitElement) {
         })
         .on("step-rendered", (e) => {
           const step = e.detail;
+
+          const activate =
+            step.options.activate ??
+            ((step, element) => {
+              return scrollIntoView(element, {
+                passive: wf.options.autoScroll === false,
+              });
+            });
+
           const stepElement = this.querySelector(`[data-step="${step.key}"]`);
 
           if (this.#flowNav) {
@@ -63,9 +72,7 @@ export class FlowUI extends EventTargetMixin(LitElement) {
           }
 
           if (stepElement) {
-            scrollIntoView(stepElement, {
-              passive: wf.options.autoScroll === false,
-            }).then(() => {
+            activate(step, stepElement).then(() => {
               stepElement.querySelector(":not(button)[name]")?.focus();
 
               // remove completed steps unless 'step-ui-rendered' event is prevented.
@@ -228,7 +235,9 @@ class Form {
         ${this.renderBackButton()}
 
         <button name="continue" title="Continue" class="primary" type="submit">
-          ${this.step.options.strings?.continue ?? this.step.flow.options.strings?.continue ?? "Continue"}
+          ${this.step.options.strings?.continue ??
+          this.step.flow.options.strings?.continue ??
+          "Continue"}
           <span class="arrow">↲</span>
         </button>
       </fieldset>

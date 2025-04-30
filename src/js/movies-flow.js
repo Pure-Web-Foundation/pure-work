@@ -11,6 +11,7 @@ const UI = {
     ...baseUI.selectOne,
     items: ["Not at all", "A bit", "Sure", "Love them!"],
     store: "lover",
+    activate: async (step, element) => {},
   },
   location: {
     ...baseUI.selectOne,
@@ -166,7 +167,7 @@ customElements.define(
         .subscribe(`flow-step-save`, (data) => {
           if (data.isModified) {
             movie[data.key] = data.value;
-          } 
+          }
         });
     }
 
@@ -208,7 +209,7 @@ customElements.define(
           });
         }
       );
-      
+
       options.useNavigation = true;
       options.useBroker = true; // use Broker (pub-sub singleton message bus)
       options.strings.continue = "Next";
@@ -305,7 +306,7 @@ customElements.define(
           ...UI.importance,
           strings: {
             continue: "Finish!",
-          }
+          },
         }
       );
 
