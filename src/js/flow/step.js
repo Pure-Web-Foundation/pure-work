@@ -48,7 +48,7 @@ export class FlowStep extends EventTargetMixin(EventTarget) {
     super();
     this.#flow = flow;
 
-    this.#id = `wf${this.#flow.stepIndex.toString(16)}`;
+    this.#id = options.id ?? `wf${this.#flow.stepIndex.toString(16)}`;
 
     this.#options = {
       topic,
@@ -205,13 +205,19 @@ export class FlowStep extends EventTargetMixin(EventTarget) {
       this.#hasChangedValue = this.#value != stepResult;
       this.#value = stepResult;
 
+      // const okay = await this.flow.canGo(1)
+      // if(!okay)
+      //   return;
+
       resolve(stepResult);
     }
 
     this._setState(isReplay ? FlowStepState.Replayed : FlowStepState.Completed);
 
     this.#completedAt = new Date().toJSON();
-    if (!isReplay) await this.#flow.options.state.saveStep(this);
+    if (!isReplay) {
+      await this.#flow.options.state.saveStep(this);
+    }
   }
 
   /**

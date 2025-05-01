@@ -13,6 +13,24 @@ const DEFAULT_RESOLVE_DELAY = 50;
 const DEFAULT_STEP_TIMEOUT = 1000 * 60 * 30; // 30 minutes.
 
 /**
+ * Event class for async events.
+ */
+export class AsyncEvent extends CustomEvent {
+  constructor(type, options) {
+    super(type, options);
+    this.promises = [];
+  }
+
+  waitFor(promise) {
+    this.promises.push(Promise.resolve(promise));
+  }
+
+  async waitAll() {
+    return Promise.all(this.promises);
+  }
+}
+
+/**
  * Flow Engine, implemented using chained promises.
  */
 export class Flow extends EventTargetMixin(EventTarget) {
@@ -86,6 +104,24 @@ export class Flow extends EventTargetMixin(EventTarget) {
     document.removeEventListener("keypress", this._keydown);
   }
 
+  /**
+   * Fires an async event and waits for all listeners to resolve.
+   * Handlers must use event.waitFor(promise).
+   * @param {String} type 
+   * @param {Object} detail 
+   * @returns { Array } - Array of resolved promises.
+   */
+  async fireAsync(type, detail) {
+    const event = new AsyncEvent(type, {
+      bubbles: true,
+      cancelable: true,
+      detail
+    });
+    this.dispatchEvent(event);
+
+    return await event.waitAll();
+  }
+
   //Creates a flow step.
   static #action(fn, baseOptions) {
     /**
@@ -121,6 +157,7 @@ export class Flow extends EventTargetMixin(EventTarget) {
 
               setTimeout(async () => {
                 await step._doComplete(r, resolve);
+
                 this.fire("step-complete", {
                   step,
                 });

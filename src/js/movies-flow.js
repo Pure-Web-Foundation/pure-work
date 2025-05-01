@@ -9,6 +9,7 @@ const UI = {
   ...baseUI,
   lover: {
     ...baseUI.selectOne,
+    id: "movieLover",
     items: ["Not at all", "A bit", "Sure", "Love them!"],
     store: "lover",
     activate: async (step, element) => {},
@@ -171,20 +172,6 @@ customElements.define(
         });
     }
 
-    createRenderRoot() {
-      return this;
-    }
-
-    render() {
-      return html`
-        <flow-ui
-          id="${this.options.id}"
-          type="${this.options.flowType ?? "full-page"}"
-          .options=${this.options}
-        ></flow-ui>
-      `;
-    }
-
     // returns options for a workflow
     get options() {
       const options = new FlowOptions(
@@ -200,13 +187,18 @@ customElements.define(
           // custom action
           this.flow.install("text", this.text.bind(this));
 
-          flow.on("flow-ended", (e) => {
-            this.load = null;
-          });
-
-          flow.on("step-ui-rendered", (e) => {
-            // work with rendered ui
-          });
+          flow
+            .on("flow-ended", (e) => {
+              //this.load = null;
+              location.href = `/`;
+            })
+            .on("step-ui-rendered", (e) => {
+              // work with rendered ui
+            })
+            .on("before-back", async (e) => {
+              const result = e.detail.step.id !== "movieLover";
+              e.waitFor(result);
+            });
         }
       );
 
@@ -214,6 +206,20 @@ customElements.define(
       options.useBroker = true; // use Broker (pub-sub singleton message bus)
       options.strings.continue = "Next";
       return options;
+    }
+
+    createRenderRoot() {
+      return this;
+    }
+
+    render() {
+      return html`
+        <flow-ui
+          id="${this.options.id}"
+          type="${this.options.flowType ?? "full-page"}"
+          .options=${this.options}
+        ></flow-ui>
+      `;
     }
 
     // custom action

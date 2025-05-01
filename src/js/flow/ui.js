@@ -1,7 +1,7 @@
 import { EventTargetMixin, parseBoolean, scrollIntoView } from "../common";
 import { LitElement, html, nothing } from "lit";
 import { FlowStepState } from "./index";
-import { Flow } from "./index";
+import { Flow, AsyncEvent } from "./index";
 import { repeat } from "lit/directives/repeat.js";
 import { keyed } from "lit/directives/keyed.js";
 import "./ui-step";
@@ -248,7 +248,7 @@ class Form {
 
   renderBackButton() {
     return html`<button
-      @click=${this.backClick}
+      @click=${this.backClick.bind(this)}
       name="back"
       title="Back"
       type="button"
@@ -260,7 +260,14 @@ class Form {
     </button>`;
   }
 
-  backClick() {
+  async backClick(e) {
+    
+    const result = await this.step.flow.fireAsync("before-back", {
+      step: this.step,
+      element: e.target.closest("button")
+    });
+
+    if(result.includes(false)) return;
     this.step.flow.back();
   }
 
